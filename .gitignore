@@ -1,0 +1,8 @@
+node_modules
+dist
+.vercel
+.npm-cache
+.runtime-home
+.env
+.env.*
+*.log
