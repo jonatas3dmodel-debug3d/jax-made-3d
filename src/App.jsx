@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 
 const artstation = "https://www.artstation.com/jonatas_araujo";
 const email = "jonatas3dmodel@gmail.com";
-const emailLink =
-  "mailto:jonatas3dmodel@gmail.com?subject=Contato%20pelo%20portf%C3%B3lio%20JAX%20MADE%203D";
+const contactEndpoint = `https://formsubmit.co/ajax/${email}`;
 
 const projects = [
   {
@@ -58,13 +57,23 @@ const projects = [
   },
   {
     index: "06",
-    title: "Bulbasaur",
-    subtitle: "ZBrush · Character & environment",
-    image: "/work/bulbasaur.webp",
+    title: "Wolf Skull — Desert Relic",
+    subtitle: "ZBrush · Unreal Engine",
+    image: "/work/wolf-skull.webp",
     className: "project project--wide",
-    alt: "Personagem Bulbasaur esculpido em ambiente natural",
+    alt: "Crânio de lobo modelado em primeiro plano em um ambiente desértico",
     description:
-      "Releitura de personagem com escultura orgânica, materiais e apresentação em ambiente natural para valorizar forma e personalidade.",
+      "Escultura anatômica apresentada em um cenário autoral no Unreal Engine, combinando modelagem orgânica, materiais e direção de atmosfera.",
+  },
+  {
+    index: "07",
+    title: "Xenoform — Specimen 01",
+    subtitle: "ZBrush · Creature design",
+    image: "/work/xenoform.webp",
+    className: "project",
+    alt: "Busto de criatura alienígena com pele azul acinzentada e estruturas alaranjadas",
+    description:
+      "Estudo de criatura extraterrestre com foco em anatomia, expressão e contraste de materiais para construir uma presença visual reconhecível.",
   },
 ];
 
@@ -81,6 +90,7 @@ function Arrow() {
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [sendStatus, setSendStatus] = useState("idle");
   const activeProject = activeIndex === null ? null : projects[activeIndex];
 
   useEffect(() => {
@@ -110,6 +120,34 @@ export default function Home() {
     setActiveIndex((current) => (current + direction + projects.length) % projects.length);
   };
 
+  const handleContactSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    formData.append("_subject", "Novo contato pelo portfólio JAX MADE 3D");
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+    formData.append("_url", window.location.href);
+
+    setSendStatus("sending");
+
+    try {
+      const response = await fetch(contactEndpoint, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) throw new Error("Não foi possível enviar a mensagem.");
+
+      form.reset();
+      setSendStatus("success");
+    } catch {
+      setSendStatus("error");
+    }
+  };
+
   return (
     <main>
       <header className="topbar">
@@ -119,6 +157,7 @@ export default function Home() {
         </a>
         <nav aria-label="Navegação principal">
           <a href="#trabalhos">Trabalhos</a>
+          <a href="#cinematica">Cinemática</a>
           <a href="#sobre">Sobre</a>
           <a href="#contato">Contato</a>
         </nav>
@@ -150,8 +189,8 @@ export default function Home() {
             <a className="button button--primary" href="#trabalhos">
               Explorar projetos <span aria-hidden="true">↓</span>
             </a>
-            <a className="button button--glass" href={emailLink}>
-              Falar sobre um projeto <Arrow />
+            <a className="button button--glass" href="#contato">
+              Iniciar contato <span aria-hidden="true">↓</span>
             </a>
           </div>
         </div>
@@ -198,14 +237,45 @@ export default function Home() {
           ))}
         </div>
 
-        <a className="text-link" href={emailLink}>
+        <a className="text-link" href="#contato">
           Gostou do trabalho? Vamos conversar <Arrow />
         </a>
       </section>
 
+      <section className="cinematic section" id="cinematica" aria-labelledby="cinematic-title">
+        <div className="section__head">
+          <div>
+            <span className="section__index">/ 02</span>
+            <p className="cinematic__eyebrow">Featured cinematic</p>
+            <h2 id="cinematic-title">Run to the Light</h2>
+          </div>
+          <p>
+            Uma sequência curta construída em Unreal Engine 5, explorando direção,
+            movimento, iluminação e atmosfera em tempo real.
+          </p>
+        </div>
+
+        <div className="cinematic__player">
+          <video
+            controls
+            preload="metadata"
+            poster="/cinematics/run-to-the-light-poster.jpg"
+            aria-label="Assistir à cinematográfica Run to the Light"
+          >
+            <source src="/cinematics/run-to-the-light-site.mp4" type="video/mp4" />
+            Seu navegador não oferece suporte à reprodução de vídeo.
+          </video>
+          <div className="cinematic__meta" aria-label="Informações da cinematográfica">
+            <span>Unreal Engine 5</span>
+            <span>Direction · Environment · Lighting</span>
+            <span>00:07</span>
+          </div>
+        </div>
+      </section>
+
       <section className="about section" id="sobre" aria-labelledby="about-title">
         <div className="about__intro">
-          <span className="section__index">/ 02</span>
+          <span className="section__index">/ 03</span>
           <p className="about__kicker">What I do</p>
           <h2 id="about-title">
             Entre a forma e a função,
@@ -244,19 +314,88 @@ export default function Home() {
           <span aria-hidden="true">EST. 2025</span>
         </div>
         <div className="contact__copy">
-          <span className="section__index">/ 03</span>
+          <span className="section__index">/ 04</span>
           <p>Tem uma ideia, um mundo ou uma cena para construir?</p>
           <h2 id="contact-title">Vamos criar algo que mereça ser explorado.</h2>
-          <a className="contact__email" href={emailLink}>
-            {email} <Arrow />
-          </a>
-          <div className="contact__actions">
-            <a className="button button--primary" href={emailLink}>
-              Enviar e-mail <Arrow />
-            </a>
-            <a className="button button--outline" href={artstation} target="_blank" rel="noreferrer">
-              ArtStation <Arrow />
-            </a>
+
+          <form className="contact-form" onSubmit={handleContactSubmit}>
+            <div className="contact-form__row">
+              <label>
+                <span>Nome</span>
+                <input
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  placeholder="Como posso chamar você?"
+                  required
+                />
+              </label>
+              <label>
+                <span>E-mail</span>
+                <input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="seuemail@exemplo.com"
+                  required
+                />
+              </label>
+            </div>
+            <label>
+              <span>Mensagem</span>
+              <textarea
+                name="message"
+                rows="5"
+                placeholder="Conte um pouco sobre a ideia, projeto ou oportunidade."
+                required
+              />
+            </label>
+            <input
+              className="contact-form__honey"
+              type="text"
+              name="_honey"
+              tabIndex="-1"
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <div className="contact-form__footer">
+              <button
+                className="button button--primary"
+                type="submit"
+                disabled={sendStatus === "sending"}
+              >
+                {sendStatus === "sending" ? "Enviando..." : "Enviar mensagem"} <Arrow />
+              </button>
+              <p className={`contact-form__status contact-form__status--${sendStatus}`} role="status">
+                {sendStatus === "success" && "Mensagem enviada. Obrigado pelo contato!"}
+                {sendStatus === "error" && "O envio falhou. Tente novamente em alguns instantes."}
+              </p>
+            </div>
+          </form>
+
+          <div className="contact__resources">
+            <span>Currículos e perfil profissional</span>
+            <div className="contact__actions">
+              <a
+                className="button button--outline"
+                href="/cv/Curriculo-Jonatas-Araujo-PT-BR.pdf"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Currículo PT-BR <Arrow />
+              </a>
+              <a
+                className="button button--outline"
+                href="/cv/Jonatas-Araujo-English-CV.pdf"
+                target="_blank"
+                rel="noreferrer"
+              >
+                English CV <Arrow />
+              </a>
+              <a className="button button--outline" href={artstation} target="_blank" rel="noreferrer">
+                ArtStation <Arrow />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -269,7 +408,7 @@ export default function Home() {
         <p>© {new Date().getFullYear()} Jonatas Araújo. Todos os direitos reservados.</p>
         <div>
           <a href={artstation} target="_blank" rel="noreferrer">ArtStation</a>
-          <a href={emailLink}>E-mail</a>
+          <a href="#contato">Contato</a>
           <a href="#top">Voltar ao topo ↑</a>
         </div>
       </footer>
