@@ -57,7 +57,7 @@ const projects = [
   },
   {
     index: "06",
-    title: "Wolf Skull — Desert Relic",
+    title: "Wolf Skull: Desert Relic",
     subtitle: "ZBrush · Unreal Engine",
     image: "/work/wolf-skull.webp",
     className: "project project--wide",
@@ -67,7 +67,7 @@ const projects = [
   },
   {
     index: "07",
-    title: "Xenoform — Specimen 01",
+    title: "Xenoform: Specimen 01",
     subtitle: "ZBrush · Creature design",
     image: "/work/xenoform.webp",
     className: "project",
@@ -151,13 +151,12 @@ export default function Home() {
   return (
     <main>
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="JAX MADE 3D — início">
+        <a className="brand" href="#top" aria-label="JAX MADE 3D, início">
           <img src="/jax-made-logo.webp" alt="" />
           <span>JAX MADE <b>3D</b></span>
         </a>
         <nav aria-label="Navegação principal">
           <a href="#trabalhos">Trabalhos</a>
-          <a href="#cinematica">Cinemática</a>
           <a href="#sobre">Sobre</a>
           <a href="#contato">Contato</a>
         </nav>
@@ -183,7 +182,7 @@ export default function Home() {
           </h1>
           <p>
             Modelagem 3D, level design e experiências cinematográficas em
-            Unreal Engine — construídas com intenção, atmosfera e detalhe.
+            Unreal Engine, construídas com intenção, atmosfera e detalhe.
           </p>
           <div className="hero__actions">
             <a className="button button--primary" href="#trabalhos">
@@ -223,7 +222,7 @@ export default function Home() {
               className={project.className}
               key={project.title}
               onClick={() => setActiveIndex(index)}
-              aria-label={`${project.title} — ampliar imagem na galeria`}
+              aria-label={`${project.title}, ampliar imagem na galeria`}
             >
               <img src={project.image} alt={project.alt} loading="lazy" />
               <span className="project__shade" />
@@ -242,40 +241,9 @@ export default function Home() {
         </a>
       </section>
 
-      <section className="cinematic section" id="cinematica" aria-labelledby="cinematic-title">
-        <div className="section__head">
-          <div>
-            <span className="section__index">/ 02</span>
-            <p className="cinematic__eyebrow">Featured cinematic</p>
-            <h2 id="cinematic-title">Run to the Light</h2>
-          </div>
-          <p>
-            Uma sequência curta construída em Unreal Engine 5, explorando direção,
-            movimento, iluminação e atmosfera em tempo real.
-          </p>
-        </div>
-
-        <div className="cinematic__player">
-          <video
-            controls
-            preload="metadata"
-            poster="/cinematics/run-to-the-light-poster.jpg"
-            aria-label="Assistir à cinematográfica Run to the Light"
-          >
-            <source src="/cinematics/run-to-the-light-site.mp4" type="video/mp4" />
-            Seu navegador não oferece suporte à reprodução de vídeo.
-          </video>
-          <div className="cinematic__meta" aria-label="Informações da cinematográfica">
-            <span>Unreal Engine 5</span>
-            <span>Direction · Environment · Lighting</span>
-            <span>00:07</span>
-          </div>
-        </div>
-      </section>
-
       <section className="about section" id="sobre" aria-labelledby="about-title">
         <div className="about__intro">
-          <span className="section__index">/ 03</span>
+          <span className="section__index">/ 02</span>
           <p className="about__kicker">What I do</p>
           <h2 id="about-title">
             Entre a forma e a função,
@@ -284,7 +252,7 @@ export default function Home() {
           <p className="about__body">
             Sou Jonatas Araújo, artista 3D focado em transformar ideias em espaços,
             personagens e cenas que convidam o olhar a permanecer. Meu processo une
-            sensibilidade visual e lógica de produção — da primeira massa cinza ao render final.
+            sensibilidade visual e lógica de produção, da primeira massa cinza ao render final.
           </p>
           <a className="text-link" href={artstation} target="_blank" rel="noreferrer">
             Conheça meu ArtStation <Arrow />
@@ -314,7 +282,7 @@ export default function Home() {
           <span aria-hidden="true">EST. 2025</span>
         </div>
         <div className="contact__copy">
-          <span className="section__index">/ 04</span>
+          <span className="section__index">/ 03</span>
           <p>Tem uma ideia, um mundo ou uma cena para construir?</p>
           <h2 id="contact-title">Vamos criar algo que mereça ser explorado.</h2>
 
