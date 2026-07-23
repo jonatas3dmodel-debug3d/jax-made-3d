@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
+
 const artstation = "https://www.artstation.com/jonatas_araujo";
-const fullPortfolio =
-  "https://drive.google.com/drive/u/2/folders/1wfWqkQzpte7UyyMqyEm5YtAniP7zBLc9";
+const email = "jonatas3dmodel@gmail.com";
+const emailLink =
+  "mailto:jonatas3dmodel@gmail.com?subject=Contato%20pelo%20portf%C3%B3lio%20JAX%20MADE%203D";
 
 const projects = [
   {
@@ -8,54 +11,60 @@ const projects = [
     title: "Revee Company",
     subtitle: "Freelancer · Real-time environment",
     image: "/work/stadium-night.webp",
-    href: "https://drive.google.com/drive/folders/1UrH0hs8Kbt_2Jamz_Wz45KTk5csC-61f",
     className: "project project--wide",
     alt: "Ambiente 3D noturno de um estádio iluminado",
+    description:
+      "Ambiente em tempo real desenvolvido para uma experiência imersiva, com foco em escala, atmosfera noturna e leitura arquitetônica.",
   },
   {
     index: "02",
     title: "ResortVR Sorocaba",
     subtitle: "Freelancer · Architectural visualization",
     image: "/work/full-resort.webp",
-    href: "https://drive.google.com/drive/folders/1NcRWwbqZ-sYxUqVjjEH4RNpvrW76PWwn",
     className: "project project--tall",
     alt: "Vista aérea renderizada de um resort tropical",
+    description:
+      "Visualização arquitetônica de um resort completo para experiência em realidade virtual, unindo composição, paisagismo e navegação espacial.",
   },
   {
     index: "03",
     title: "Block 406",
     subtitle: "Game jam · Level design",
     image: "/work/block-406.webp",
-    href: "https://drive.google.com/drive/folders/1y0IKZRA5CaqSAYbkLoYlGbn_UVF354aN",
     className: "project",
     alt: "Lobby de apartamento criado em Unreal Engine",
+    description:
+      "Level design criado para game jam, trabalhando progressão, fluxo do jogador, objetivos e construção de atmosfera em Unreal Engine.",
   },
   {
     index: "04",
     title: "Echoes of the Void",
     subtitle: "ZTalent · Blocking & level design",
     image: "/work/echoes-bar.webp",
-    href: "https://drive.google.com/drive/folders/10K2txuxXrZYdu6BOtyMzF8kUCIn6CNge",
     className: "project",
     alt: "Blocking de bar em cinza para estudo de level design",
+    description:
+      "Estudo de blocking e distribuição espacial para um ambiente narrativo, priorizando ritmo, pontos de interesse e caminhos intuitivos.",
   },
   {
     index: "05",
     title: "Virex, the Hollow Seer",
     subtitle: "ZBrush · Organic sculpting",
     image: "/work/virex.webp",
-    href: "https://drive.google.com/drive/folders/19jugZPGVIy1LgO5CiQVc-oAfFMxHKnjW",
     className: "project",
     alt: "Escultura digital de criatura chamada Virex",
+    description:
+      "Criatura autoral esculpida em ZBrush, explorando anatomia fantástica, silhueta e uma identidade visual inquietante.",
   },
   {
     index: "06",
     title: "Bulbasaur",
     subtitle: "ZBrush · Character & environment",
     image: "/work/bulbasaur.webp",
-    href: "https://drive.google.com/drive/folders/19jugZPGVIy1LgO5CiQVc-oAfFMxHKnjW",
     className: "project project--wide",
     alt: "Personagem Bulbasaur esculpido em ambiente natural",
+    description:
+      "Releitura de personagem com escultura orgânica, materiais e apresentação em ambiente natural para valorizar forma e personalidade.",
   },
 ];
 
@@ -71,6 +80,36 @@ function Arrow() {
 }
 
 export default function Home() {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const activeProject = activeIndex === null ? null : projects[activeIndex];
+
+  useEffect(() => {
+    if (activeIndex === null) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setActiveIndex(null);
+      if (event.key === "ArrowLeft") {
+        setActiveIndex((current) => (current - 1 + projects.length) % projects.length);
+      }
+      if (event.key === "ArrowRight") {
+        setActiveIndex((current) => (current + 1) % projects.length);
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeIndex]);
+
+  const changeProject = (direction) => {
+    setActiveIndex((current) => (current + direction + projects.length) % projects.length);
+  };
+
   return (
     <main>
       <header className="topbar">
@@ -111,8 +150,8 @@ export default function Home() {
             <a className="button button--primary" href="#trabalhos">
               Explorar projetos <span aria-hidden="true">↓</span>
             </a>
-            <a className="button button--glass" href={fullPortfolio} target="_blank" rel="noreferrer">
-              Portfólio completo <Arrow />
+            <a className="button button--glass" href={emailLink}>
+              Falar sobre um projeto <Arrow />
             </a>
           </div>
         </div>
@@ -132,18 +171,20 @@ export default function Home() {
             <span className="section__index">/ 01</span>
             <h2 id="work-title">Selected work</h2>
           </div>
-          <p>Uma seleção entre ambientes, experiências interativas, level design e escultura digital.</p>
+          <p>
+            Uma galeria curada entre trabalhos profissionais, ambientes em tempo real,
+            level design e escultura digital. Clique em uma imagem para ampliar.
+          </p>
         </div>
 
         <div className="project-grid">
-          {projects.map((project) => (
-            <a
+          {projects.map((project, index) => (
+            <button
+              type="button"
               className={project.className}
-              href={project.href}
-              target="_blank"
-              rel="noreferrer"
               key={project.title}
-              aria-label={`${project.title} — abrir projeto no Google Drive`}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`${project.title} — ampliar imagem na galeria`}
             >
               <img src={project.image} alt={project.alt} loading="lazy" />
               <span className="project__shade" />
@@ -152,13 +193,13 @@ export default function Home() {
                 <small>{project.subtitle}</small>
                 <strong>{project.title}</strong>
               </span>
-              <span className="project__open"><Arrow /></span>
-            </a>
+              <span className="project__open" aria-hidden="true">＋</span>
+            </button>
           ))}
         </div>
 
-        <a className="text-link" href={fullPortfolio} target="_blank" rel="noreferrer">
-          Ver arquivo completo no Google Drive <Arrow />
+        <a className="text-link" href={emailLink}>
+          Gostou do trabalho? Vamos conversar <Arrow />
         </a>
       </section>
 
@@ -206,15 +247,15 @@ export default function Home() {
           <span className="section__index">/ 03</span>
           <p>Tem uma ideia, um mundo ou uma cena para construir?</p>
           <h2 id="contact-title">Vamos criar algo que mereça ser explorado.</h2>
+          <a className="contact__email" href={emailLink}>
+            {email} <Arrow />
+          </a>
           <div className="contact__actions">
-            <a className="button button--primary" href={artstation} target="_blank" rel="noreferrer">
-              Falar pelo ArtStation <Arrow />
+            <a className="button button--primary" href={emailLink}>
+              Enviar e-mail <Arrow />
             </a>
-            <a className="button button--outline" href="https://drive.google.com/file/d/1neLJN_sF-HKvtA2mRfYGJqbvEJO24zku/view" target="_blank" rel="noreferrer">
-              Currículo PT <Arrow />
-            </a>
-            <a className="button button--outline" href="https://drive.google.com/file/d/19v2gzyFr-6K0qEIQzH9OxE7qk0B4lmta/view" target="_blank" rel="noreferrer">
-              CV English <Arrow />
+            <a className="button button--outline" href={artstation} target="_blank" rel="noreferrer">
+              ArtStation <Arrow />
             </a>
           </div>
         </div>
@@ -228,10 +269,61 @@ export default function Home() {
         <p>© {new Date().getFullYear()} Jonatas Araújo. Todos os direitos reservados.</p>
         <div>
           <a href={artstation} target="_blank" rel="noreferrer">ArtStation</a>
-          <a href={fullPortfolio} target="_blank" rel="noreferrer">Google Drive</a>
+          <a href={emailLink}>E-mail</a>
           <a href="#top">Voltar ao topo ↑</a>
         </div>
       </footer>
+
+      {activeProject && (
+        <div
+          className="lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="lightbox-title"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setActiveIndex(null);
+          }}
+        >
+          <button
+            className="lightbox__close"
+            type="button"
+            onClick={() => setActiveIndex(null)}
+            aria-label="Fechar galeria"
+          >
+            Fechar <span aria-hidden="true">×</span>
+          </button>
+          <button
+            className="lightbox__nav lightbox__nav--prev"
+            type="button"
+            onClick={() => changeProject(-1)}
+            aria-label="Projeto anterior"
+          >
+            ←
+          </button>
+          <figure className="lightbox__figure">
+            <img src={activeProject.image} alt={activeProject.alt} />
+            <figcaption>
+              <span>
+                {String(activeIndex + 1).padStart(2, "0")} /{" "}
+                {String(projects.length).padStart(2, "0")}
+              </span>
+              <div>
+                <small>{activeProject.subtitle}</small>
+                <h2 id="lightbox-title">{activeProject.title}</h2>
+                <p>{activeProject.description}</p>
+              </div>
+            </figcaption>
+          </figure>
+          <button
+            className="lightbox__nav lightbox__nav--next"
+            type="button"
+            onClick={() => changeProject(1)}
+            aria-label="Próximo projeto"
+          >
+            →
+          </button>
+        </div>
+      )}
     </main>
   );
 }
