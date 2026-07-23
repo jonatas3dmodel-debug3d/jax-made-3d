@@ -113,7 +113,7 @@ img { display: block; max-width: 100%; }
 .contact__visual { position: relative; width: min(100%, 520px); aspect-ratio: 1; border: 1px solid var(--line); display: grid; place-items: center; background: linear-gradient(145deg, rgba(255,255,255,.03), transparent); }
 .contact__visual::before, .contact__visual::after { content: ""; position: absolute; inset: 8%; border: 1px solid rgba(3,216,255,.14); transform: rotate(12deg); }
 .contact__visual::after { transform: rotate(-7deg); inset: 16%; }
-.contact__visual img { position: relative; z-index: 2; width: 65%; border-radius: 14%; box-shadow: 0 24px 80px rgba(0,0,0,.55), 0 0 70px rgba(3,216,255,.12); }
+.contact__visual img { position: relative; z-index: 2; width: 70%; height: 78%; object-fit: cover; object-position: center 40%; border: 1px solid rgba(255,255,255,.15); border-radius: 3px; filter: saturate(.88) contrast(1.04); box-shadow: 0 24px 80px rgba(0,0,0,.55), 0 0 70px rgba(3,216,255,.12); }
 .contact__visual > span { position: absolute; z-index: 3; right: -28px; bottom: 35px; writing-mode: vertical-rl; color: #65727a; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .24em; }
 .contact__copy > p { margin: 0 0 22px; color: var(--cyan); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
 .contact__copy h2 { margin: 0; max-width: 800px; font-size: clamp(48px, 6.3vw, 94px); line-height: .92; letter-spacing: -.07em; font-weight: 560; }

@@ -278,7 +278,11 @@ export default function Home() {
 
       <section className="contact section" id="contato" aria-labelledby="contact-title">
         <div className="contact__visual">
-          <img src="/jax-made-logo.webp" alt="Logo JAX MADE 3D" loading="lazy" />
+          <img
+            src="/profile/jonatas-araujo.webp"
+            alt="Retrato profissional de Jonatas Araújo"
+            loading="lazy"
+          />
           <span aria-hidden="true">EST. 2025</span>
         </div>
         <div className="contact__copy">
