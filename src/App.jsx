@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const artstation = "https://www.artstation.com/jonatas_araujo";
 const email = "jonatas3dmodel@gmail.com";
@@ -89,9 +89,96 @@ function Arrow() {
 }
 
 export default function Home() {
+  const mainRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(null);
   const [sendStatus, setSendStatus] = useState("idle");
   const activeProject = activeIndex === null ? null : projects[activeIndex];
+
+  useEffect(() => {
+    const root = mainRef.current;
+    if (!root) return undefined;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const topbar = root.querySelector(".topbar");
+    const revealItems = root.querySelectorAll(".reveal");
+    const projectItems = root.querySelectorAll(".project");
+    let animationFrame = 0;
+
+    requestAnimationFrame(() => root.classList.add("is-loaded"));
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.13, rootMargin: "0px 0px -7% 0px" },
+    );
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+
+    const updateScroll = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? scrollTop / scrollable : 0;
+
+        root.style.setProperty("--scroll-progress", progress.toFixed(4));
+        root.style.setProperty("--hero-scroll", `${Math.min(scrollTop * 0.12, 90)}px`);
+        topbar?.classList.toggle("is-scrolled", scrollTop > 32);
+      });
+    };
+
+    const updatePointer = (event) => {
+      if (reducedMotion) return;
+      const x = event.clientX / window.innerWidth;
+      const y = event.clientY / window.innerHeight;
+      root.style.setProperty("--pointer-x", `${event.clientX}px`);
+      root.style.setProperty("--pointer-y", `${event.clientY}px`);
+      root.style.setProperty("--hero-x", `${(x - 0.5) * -18}px`);
+      root.style.setProperty("--hero-y", `${(y - 0.5) * -12}px`);
+    };
+
+    const projectCleanups = [];
+    projectItems.forEach((project) => {
+      const handleMove = (event) => {
+        if (reducedMotion) return;
+        const rect = project.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        project.style.setProperty("--tilt-x", `${(0.5 - y) * 2.2}deg`);
+        project.style.setProperty("--tilt-y", `${(x - 0.5) * 2.2}deg`);
+        project.style.setProperty("--shine-x", `${x * 100}%`);
+        project.style.setProperty("--shine-y", `${y * 100}%`);
+      };
+      const handleLeave = () => {
+        project.style.setProperty("--tilt-x", "0deg");
+        project.style.setProperty("--tilt-y", "0deg");
+      };
+
+      project.addEventListener("pointermove", handleMove);
+      project.addEventListener("pointerleave", handleLeave);
+      projectCleanups.push(() => {
+        project.removeEventListener("pointermove", handleMove);
+        project.removeEventListener("pointerleave", handleLeave);
+      });
+    });
+
+    updateScroll();
+    window.addEventListener("scroll", updateScroll, { passive: true });
+    window.addEventListener("pointermove", updatePointer, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      revealObserver.disconnect();
+      projectCleanups.forEach((cleanup) => cleanup());
+      window.removeEventListener("scroll", updateScroll);
+      window.removeEventListener("pointermove", updatePointer);
+    };
+  }, []);
 
   useEffect(() => {
     if (activeIndex === null) return undefined;
@@ -149,8 +236,10 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className="site-shell" ref={mainRef}>
+      <div className="cursor-aura" aria-hidden="true" />
       <header className="topbar">
+        <span className="topbar__progress" aria-hidden="true" />
         <a className="brand" href="#top" aria-label="JAX MADE 3D, início">
           <img src="/jax-made-logo.webp" alt="" />
           <span>JAX MADE <b>3D</b></span>
@@ -173,6 +262,12 @@ export default function Home() {
         />
         <div className="hero__veil" />
         <div className="hero__grid" aria-hidden="true" />
+        <div className="hero__scan" aria-hidden="true" />
+        <div className="hero__signal" aria-hidden="true">
+          <span>ENV / 3D</span>
+          <i />
+          <span>REALTIME</span>
+        </div>
 
         <div className="hero__content">
           <div className="eyebrow"><i /> Jonatas Araújo · 3D Artist</div>
@@ -185,10 +280,10 @@ export default function Home() {
             Unreal Engine, construídas com intenção, atmosfera e detalhe.
           </p>
           <div className="hero__actions">
-            <a className="button button--primary" href="#trabalhos">
+            <a className="button button--primary magnetic" href="#trabalhos">
               Explorar projetos <span aria-hidden="true">↓</span>
             </a>
-            <a className="button button--glass" href="#contato">
+            <a className="button button--glass magnetic" href="#contato">
               Iniciar contato <span aria-hidden="true">↓</span>
             </a>
           </div>
@@ -201,10 +296,14 @@ export default function Home() {
         </div>
 
         <div className="hero__mark" aria-hidden="true">JAX / 3D</div>
+        <a className="hero__scroll" href="#trabalhos" aria-label="Ir para os projetos">
+          <span>Scroll to explore</span>
+          <i aria-hidden="true" />
+        </a>
       </section>
 
       <section className="work section" id="trabalhos" aria-labelledby="work-title">
-        <div className="section__head">
+        <div className="section__head reveal">
           <div>
             <span className="section__index">/ 01</span>
             <h2 id="work-title">Selected work</h2>
@@ -219,13 +318,15 @@ export default function Home() {
           {projects.map((project, index) => (
             <button
               type="button"
-              className={project.className}
+              className={`${project.className} reveal`}
               key={project.title}
               onClick={() => setActiveIndex(index)}
               aria-label={`${project.title}, ampliar imagem na galeria`}
+              style={{ "--reveal-delay": `${(index % 2) * 110}ms` }}
             >
               <img src={project.image} alt={project.alt} loading="lazy" />
               <span className="project__shade" />
+              <span className="project__shine" aria-hidden="true" />
               <span className="project__number">{project.index}</span>
               <span className="project__copy">
                 <small>{project.subtitle}</small>
@@ -236,13 +337,13 @@ export default function Home() {
           ))}
         </div>
 
-        <a className="text-link" href="#contato">
+        <a className="text-link reveal" href="#contato">
           Gostou do trabalho? Vamos conversar <Arrow />
         </a>
       </section>
 
       <section className="about section" id="sobre" aria-labelledby="about-title">
-        <div className="about__intro">
+        <div className="about__intro reveal">
           <span className="section__index">/ 02</span>
           <p className="about__kicker">What I do</p>
           <h2 id="about-title">
@@ -261,7 +362,11 @@ export default function Home() {
 
         <div className="disciplines">
           {disciplines.map(([number, title, text]) => (
-            <article key={title}>
+            <article
+              className="reveal"
+              key={title}
+              style={{ "--reveal-delay": `${Number(number) * 70}ms` }}
+            >
               <span>{number}</span>
               <h3>{title}</h3>
               <p>{text}</p>
@@ -277,7 +382,7 @@ export default function Home() {
       </section>
 
       <section className="contact section" id="contato" aria-labelledby="contact-title">
-        <div className="contact__visual">
+        <div className="contact__visual reveal">
           <img
             src="/profile/jonatas-araujo.webp"
             alt="Retrato profissional de Jonatas Araújo"
@@ -285,7 +390,7 @@ export default function Home() {
           />
           <span aria-hidden="true">EST. 2025</span>
         </div>
-        <div className="contact__copy">
+        <div className="contact__copy reveal" style={{ "--reveal-delay": "120ms" }}>
           <span className="section__index">/ 03</span>
           <p>Tem uma ideia, um mundo ou uma cena para construir?</p>
           <h2 id="contact-title">Vamos criar algo que mereça ser explorado.</h2>
@@ -411,7 +516,7 @@ export default function Home() {
           >
             ←
           </button>
-          <figure className="lightbox__figure">
+          <figure className="lightbox__figure" key={activeProject.title}>
             <img src={activeProject.image} alt={activeProject.alt} />
             <figcaption>
               <span>
