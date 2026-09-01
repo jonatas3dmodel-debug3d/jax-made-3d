@@ -37,13 +37,13 @@ const projects = [
   },
   {
     index: "04",
-    title: "Echoes of the Void",
-    subtitle: "ZTalent · Blocking & level design",
-    image: "/work/echoes-bar.webp",
+    title: "Varkos — Tyrannosaurus Rex",
+    subtitle: "ZBrush · Creature modeling",
+    image: "/work/varkos-trex.webp",
     className: "project",
-    alt: "Blocking de bar em cinza para estudo de level design",
+    alt: "Modelo 3D realista do Tyrannosaurus Rex Varkos",
     description:
-      "Estudo de blocking e distribuição espacial para um ambiente narrativo, priorizando ritmo, pontos de interesse e caminhos intuitivos.",
+      "Realistic T. rex study focused on anatomy, skin detail, texturing and final presentation.",
   },
   {
     index: "05",
