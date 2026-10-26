@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "sync:artstation": "node scripts/sync-artstation.mjs",
+    "prebuild": "node scripts/sync-artstation.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

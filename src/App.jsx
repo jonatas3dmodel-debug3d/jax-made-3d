@@ -11,6 +11,7 @@ import {
   stats,
   toolkit,
 } from "./data.js";
+import { mergeArtstation, profileUrl, sizeOf, syncedAt } from "./artstation.js";
 import { CountUp, prefersReducedMotion, useReveal, useScrollEffects, useScrollSpy } from "./hooks.jsx";
 
 const contactEndpoint = `https://formsubmit.co/ajax/${email}`;
@@ -21,6 +22,8 @@ const navLinks = [
   ["experiencia", "Experiência"],
   ["contato", "Contato"],
 ];
+
+const { curated, recent } = mergeArtstation(projects);
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -159,6 +162,65 @@ function Hero() {
 }
 
 /* -------------------------------------------------------------------------------------------- */
+function LightboxFigure({ project }) {
+  const [current, setCurrent] = useState(0);
+  const images = project.images ?? [{ src: project.image, alt: project.alt }];
+  const shown = images[current] ?? images[0];
+  const many = images.length > 1;
+
+  return (
+    <figure className="lightbox__figure">
+      {many ? (
+        <button
+          type="button"
+          className="lightbox__stage"
+          onClick={() => setCurrent((value) => (value + 1) % images.length)}
+          aria-label={`Imagem ${current + 1} de ${images.length}. Clique para ver a próxima`}
+        >
+          <img src={shown.src} alt={shown.alt} />
+        </button>
+      ) : (
+        <img className="lightbox__single" src={shown.src} alt={shown.alt} />
+      )}
+      {many && (
+        <ul className="lightbox__thumbs" aria-label="Imagens do projeto">
+          {images.map((image, index) => (
+            <li key={image.src}>
+              <button
+                type="button"
+                aria-label={`Ver imagem ${index + 1} de ${images.length}`}
+                aria-current={index === current ? "true" : undefined}
+                onClick={() => setCurrent(index)}
+              >
+                <img src={sizeOf(image.src, "small")} alt="" loading="lazy" decoding="async" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <figcaption>
+        <div>
+          <small>{project.subtitle}</small>
+          <h2 id="lightbox-title">{project.title}</h2>
+          <p>{project.description}</p>
+          {project.tags?.length > 0 && (
+            <ul className="chips" aria-label="Ferramentas e disciplinas">
+              {project.tags.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          )}
+          {project.artstationUrl && (
+            <a className="text-link" href={project.artstationUrl} target="_blank" rel="noreferrer">
+              Ver projeto completo no ArtStation <Arrow />
+            </a>
+          )}
+        </div>
+      </figcaption>
+    </figure>
+  );
+}
+
 function Lightbox({ items, index, onChange, onClose }) {
   const dialogRef = useRef(null);
   const project = items[index];
@@ -180,7 +242,7 @@ function Lightbox({ items, index, onChange, onClose }) {
       if (event.key === "ArrowLeft") onChange(-1);
       if (event.key === "ArrowRight") onChange(1);
       if (event.key === "Tab") {
-        const focusable = [...dialogRef.current.querySelectorAll("button")];
+        const focusable = [...dialogRef.current.querySelectorAll("button, a[href]")];
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
         if (event.shiftKey && document.activeElement === first) {
@@ -213,24 +275,10 @@ function Lightbox({ items, index, onChange, onClose }) {
       <button className="lightbox__nav lightbox__nav--prev" type="button" onClick={() => onChange(-1)} aria-label="Projeto anterior">
         ←
       </button>
-      <figure className="lightbox__figure" key={project.title}>
-        <img src={project.image} alt={project.alt} />
-        <figcaption>
-          <span>
-            {String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
-          </span>
-          <div>
-            <small>{project.subtitle}</small>
-            <h2 id="lightbox-title">{project.title}</h2>
-            <p>{project.description}</p>
-            <ul className="chips" aria-label="Ferramentas e disciplinas">
-              {project.tags.map((tag) => (
-                <li key={tag}>{tag}</li>
-              ))}
-            </ul>
-          </div>
-        </figcaption>
-      </figure>
+      <LightboxFigure key={project.title} project={project} />
+      <span className="lightbox__counter" aria-live="polite">
+        {String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+      </span>
       <button className="lightbox__nav lightbox__nav--next" type="button" onClick={() => onChange(1)} aria-label="Próximo projeto">
         →
       </button>
@@ -296,14 +344,15 @@ function Work({ filter, setFilter, items, onOpen }) {
             type="button"
             className={`project reveal${filter === "all" && project.layout ? ` project--${project.layout}` : ""}`}
             key={`${filter}-${project.title}`}
-            onClick={() => onOpen(index)}
+            onClick={() => onOpen("work", index)}
             aria-label={`${project.title}, ampliar imagem na galeria`}
             style={{ "--reveal-delay": `${(index % 2) * 110}ms`, "--ratio": project.ratio }}
           >
             <img src={project.image} alt={project.alt} loading="lazy" decoding="async" />
             <span className="project__shade" />
             <span className="project__shine" aria-hidden="true" />
-            <span className="project__number">{String(projects.indexOf(project) + 1).padStart(2, "0")}</span>
+            <span className="project__number">{String(curated.indexOf(project) + 1).padStart(2, "0")}</span>
+            {project.images?.length > 1 && <span className="project__count">{project.images.length} imagens</span>}
             <span className="project__copy">
               <small>{project.subtitle}</small>
               <strong>{project.title}</strong>
@@ -315,10 +364,53 @@ function Work({ filter, setFilter, items, onOpen }) {
         ))}
       </div>
 
+      <Recent items={recent} onOpen={(index) => onOpen("recent", index)} />
+
       <a className="text-link reveal" href="#contato">
         Gostou do trabalho? Vamos conversar <Arrow />
       </a>
     </section>
+  );
+}
+
+function Recent({ items, onOpen }) {
+  if (!items.length) return null;
+  const updated = syncedAt ? new Date(syncedAt).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" }) : null;
+
+  return (
+    <div className="recent reveal">
+      <div className="recent__head">
+        <div>
+          <h3>Novidades no ArtStation</h3>
+          <p>
+            Projetos recentes do meu perfil, com todas as imagens de cada um.
+            {updated && <> Atualizado em {updated}.</>}
+          </p>
+        </div>
+        <a className="text-link" href={profileUrl} target="_blank" rel="noreferrer">
+          Ver perfil completo <Arrow />
+        </a>
+      </div>
+      <div className="recent__grid">
+        {items.map((project, index) => (
+          <button
+            type="button"
+            className="recent-card"
+            key={project.title}
+            onClick={() => onOpen(index)}
+            aria-label={`${project.title}, ver as ${project.images.length} imagens do projeto`}
+          >
+            <img src={project.image} alt={project.alt} loading="lazy" decoding="async" />
+            <span className="recent-card__meta">
+              <small>
+                {project.subtitle.replace("ArtStation · ", "")} · {project.images.length} imagens
+              </small>
+              <strong>{project.title}</strong>
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -531,22 +623,28 @@ function Contact() {
 export default function Home() {
   const rootRef = useRef(null);
   const [filter, setFilter] = useState("all");
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [box, setBox] = useState(null); // { list: "work" | "recent", index }
   const active = useScrollSpy(navLinks.map(([id]) => id));
 
   const items = useMemo(
-    () => (filter === "all" ? projects : projects.filter((project) => project.categories.includes(filter))),
+    () => (filter === "all" ? curated : curated.filter((project) => project.categories.includes(filter))),
     [filter],
   );
+  const boxItems = box?.list === "recent" ? recent : items;
 
   useScrollEffects(rootRef);
   useReveal(rootRef, [filter]);
 
+  const openBox = useCallback((list, index) => setBox({ list, index }), []);
   const changeProject = useCallback(
-    (direction) => setActiveIndex((current) => (current + direction + items.length) % items.length),
-    [items.length],
+    (direction) =>
+      setBox((current) => {
+        const length = (current.list === "recent" ? recent : items).length;
+        return { ...current, index: (current.index + direction + length) % length };
+      }),
+    [items],
   );
-  const closeLightbox = useCallback(() => setActiveIndex(null), []);
+  const closeLightbox = useCallback(() => setBox(null), []);
 
   return (
     <div className="site-shell" ref={rootRef}>
@@ -558,7 +656,7 @@ export default function Home() {
 
       <main id="conteudo" tabIndex="-1">
         <Hero />
-        <Work filter={filter} setFilter={setFilter} items={items} onOpen={setActiveIndex} />
+        <Work filter={filter} setFilter={setFilter} items={items} onOpen={openBox} />
         <About />
         <Experience />
 
@@ -588,8 +686,8 @@ export default function Home() {
         </div>
       </footer>
 
-      {activeIndex !== null && items[activeIndex] && (
-        <Lightbox items={items} index={activeIndex} onChange={changeProject} onClose={closeLightbox} />
+      {box && boxItems[box.index] && (
+        <Lightbox items={boxItems} index={box.index} onChange={changeProject} onClose={closeLightbox} />
       )}
     </div>
   );
