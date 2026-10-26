@@ -40,7 +40,7 @@ export function useReveal(rootRef, deps = []) {
  * - everything is coalesced to one update per frame;
  * - the hero parallax stops when the hero is off screen; layout is measured once, not read on every scroll.
  */
-export function useScrollEffects(rootRef) {
+export function useScrollEffects(rootRef, version = 0) {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return undefined;
@@ -108,11 +108,11 @@ export function useScrollEffects(rootRef) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointer);
     };
-  }, [rootRef]);
+  }, [rootRef, version]);
 }
 
 /** Pauses the endless animations of a section while it is off screen (they kept repainting for nothing). */
-export function usePauseOffscreen(rootRef, selector) {
+export function usePauseOffscreen(rootRef, selector, version = 0) {
   useEffect(() => {
     const root = rootRef.current;
     if (!root || !("IntersectionObserver" in window)) return undefined;
@@ -121,11 +121,11 @@ export function usePauseOffscreen(rootRef, selector) {
     });
     root.querySelectorAll(selector).forEach((node) => observer.observe(node));
     return () => observer.disconnect();
-  }, [rootRef, selector]);
+  }, [rootRef, selector, version]);
 }
 
 /** Returns the id of the section currently crossing the middle of the viewport. */
-export function useScrollSpy(ids) {
+export function useScrollSpy(ids, version = 0) {
   const [active, setActive] = useState(null);
   const key = ids.join("|");
 
@@ -144,7 +144,7 @@ export function useScrollSpy(ids) {
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [key, version]);
 
   return active;
 }

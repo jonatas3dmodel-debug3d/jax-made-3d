@@ -1,0 +1,185 @@
+{
+  "covers/varkos-trex": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1536
+  },
+  "covers/virex": {
+    "widths": [
+      640,
+      1280,
+      1480
+    ],
+    "w": 1480,
+    "h": 833
+  },
+  "covers/wolf-skull": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1032
+  },
+  "covers/xenoform": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1536
+  },
+  "revee/01-stadium-at-night": {
+    "widths": [
+      640,
+      1280,
+      1435
+    ],
+    "w": 1435,
+    "h": 863
+  },
+  "revee/02-environment-at-night": {
+    "widths": [
+      640,
+      1280,
+      1325
+    ],
+    "w": 1325,
+    "h": 894
+  },
+  "revee/03-aerial-view": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1032
+  },
+  "revee/04-facade-and-gardens": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1032
+  },
+  "revee/05-gardens": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1032
+  },
+  "revee/06-concourse": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1032
+  },
+  "revee/07-players-tunnel": {
+    "widths": [
+      640,
+      1280,
+      1436
+    ],
+    "w": 1436,
+    "h": 836
+  },
+  "revee/08-theater": {
+    "widths": [
+      640,
+      1280,
+      1520
+    ],
+    "w": 1520,
+    "h": 894
+  },
+  "resort/01-full-resort": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1352
+  },
+  "resort/02-zipline": {
+    "widths": [
+      640,
+      1093
+    ],
+    "w": 1093,
+    "h": 719
+  },
+  "resort/03-hotel": {
+    "widths": [
+      640,
+      1280
+    ],
+    "w": 1280,
+    "h": 960
+  },
+  "resort/04-police-station": {
+    "widths": [
+      640,
+      1280,
+      1309
+    ],
+    "w": 1309,
+    "h": 767
+  },
+  "resort/05-plaza": {
+    "widths": [
+      640,
+      1280,
+      1600
+    ],
+    "w": 1600,
+    "h": 800
+  },
+  "resort/06-zipline-model": {
+    "widths": [
+      640,
+      991
+    ],
+    "w": 991,
+    "h": 646
+  },
+  "block406/01-apartment-lobby": {
+    "widths": [
+      640,
+      1180
+    ],
+    "w": 1180,
+    "h": 574
+  },
+  "block406/02-blocking-bedroom-2": {
+    "widths": [
+      640,
+      1232
+    ],
+    "w": 1232,
+    "h": 544
+  },
+  "block406/03-blocking-bedroom": {
+    "widths": [
+      640,
+      967
+    ],
+    "w": 967,
+    "h": 544
+  }
+}

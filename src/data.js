@@ -1,169 +1,49 @@
-// Conteúdo do portfólio. Tudo aqui vem dos projetos já publicados no site e dos currículos (public/cv).
-// Para atualizar textos ou adicionar projetos, edite este arquivo; a interface se adapta.
+// Estrutura do conteúdo (o que não depende de idioma). Os textos ficam em src/copy.js.
+// Para adicionar um projeto: gere as imagens (WebP em 640/1280/1920 px) em public/work/<pasta>/, registre-as em
+// src/work-manifest.json, inclua o item aqui e os textos (subtitle, description, tags, alts) em pt e en no copy.js.
 
 export const artstation = "https://www.artstation.com/jonatas_araujo";
 export const email = "jonatas3dmodel@gmail.com";
+export const whatsapp = { number: "5511984516003", display: "+55 11 98451-6003" };
 
-export const filters = [
-  { key: "all", label: "Todos" },
-  { key: "ambientes", label: "Ambientes" },
-  { key: "criaturas", label: "Criaturas" },
-];
+export const filterKeys = ["all", "ambientes", "criaturas"];
 
+// `images` são chaves do manifesto (public/work/<chave>-<largura>.webp); a primeira é a capa.
+// `artstationId` liga o projeto ao do ArtStation (os títulos nem sempre coincidem): a galeria passa a mostrar o projeto completo.
 export const projects = [
   {
+    key: "revee",
     title: "Revee Company",
-    subtitle: "Freelancer · Real-time environment",
-    image: "/work/stadium-night.webp",
-    ratio: "1435 / 863",
     categories: ["ambientes"],
-    tags: ["Unreal Engine", "Environment art"],
-    alt: "Ambiente 3D noturno de um estádio iluminado",
-    description:
-      "Ambiente em tempo real desenvolvido para uma experiência imersiva, com foco em escala, atmosfera noturna e leitura arquitetônica.",
     layout: "wide",
+    images: [
+      "revee/01-stadium-at-night",
+      "revee/02-environment-at-night",
+      "revee/03-aerial-view",
+      "revee/04-facade-and-gardens",
+      "revee/05-gardens",
+      "revee/06-concourse",
+      "revee/07-players-tunnel",
+      "revee/08-theater",
+    ],
   },
   {
+    key: "resort",
     title: "ResortVR Sorocaba",
-    subtitle: "Freelancer · Architectural visualization",
-    image: "/work/full-resort.webp",
-    ratio: "2400 / 1690",
     categories: ["ambientes"],
-    tags: ["Realidade virtual", "Visualização arquitetônica"],
-    alt: "Vista aérea renderizada de um resort tropical",
-    description:
-      "Visualização arquitetônica de um resort completo para experiência em realidade virtual, unindo composição, paisagismo e navegação espacial.",
+    images: ["resort/01-full-resort", "resort/02-zipline", "resort/03-hotel", "resort/04-police-station", "resort/05-plaza", "resort/06-zipline-model"],
   },
   {
+    key: "block406",
     title: "Block 406",
-    subtitle: "Game jam · Level design",
-    image: "/work/block-406.webp",
-    ratio: "1357 / 887",
     categories: ["ambientes"],
-    tags: ["Unreal Engine", "Level design", "Game jam"],
-    alt: "Lobby de apartamento criado em Unreal Engine",
-    description:
-      "Level design criado para game jam, trabalhando progressão, fluxo do jogador, objetivos e construção de atmosfera em Unreal Engine.",
+    images: ["block406/01-apartment-lobby", "block406/02-blocking-bedroom-2", "block406/03-blocking-bedroom"],
   },
-  {
-    title: "Varkos — Tyrannosaurus Rex",
-    artstationId: "P4el1L",
-    subtitle: "ZBrush · Creature modeling",
-    image: "/work/varkos-trex.webp",
-    ratio: "1920 / 1536",
-    categories: ["criaturas"],
-    tags: ["ZBrush", "Anatomia", "Texturização"],
-    alt: "Modelo 3D realista do Tyrannosaurus Rex Varkos",
-    description:
-      "Estudo realista de um T. rex com foco em anatomia, detalhes de pele, texturização e apresentação final.",
-  },
-  {
-    title: "Virex, the Hollow Seer",
-    artstationId: "qJx8bz",
-    subtitle: "ZBrush · Organic sculpting",
-    image: "/work/virex.webp",
-    ratio: "1480 / 833",
-    categories: ["criaturas"],
-    tags: ["ZBrush", "Escultura orgânica"],
-    alt: "Escultura digital de criatura chamada Virex",
-    description:
-      "Criatura autoral esculpida em ZBrush, explorando anatomia fantástica, silhueta e uma identidade visual inquietante.",
-  },
-  {
-    title: "Wolf Skull: Desert Relic",
-    artstationId: "qJGWBL",
-    subtitle: "ZBrush · Unreal Engine",
-    image: "/work/wolf-skull.webp",
-    ratio: "2400 / 1290",
-    categories: ["criaturas", "ambientes"],
-    tags: ["ZBrush", "Unreal Engine", "Materiais"],
-    alt: "Crânio de lobo modelado em primeiro plano em um ambiente desértico",
-    description:
-      "Escultura anatômica apresentada em um cenário autoral no Unreal Engine, combinando modelagem orgânica, materiais e direção de atmosfera.",
-  },
-  {
-    title: "Xenoform: Specimen 01",
-    artstationId: "P6lwZL",
-    subtitle: "ZBrush · Creature design",
-    image: "/work/xenoform.webp",
-    ratio: "2000 / 1600",
-    categories: ["criaturas"],
-    tags: ["ZBrush", "Creature design"],
-    alt: "Busto de criatura alienígena com pele azul acinzentada e estruturas alaranjadas",
-    description:
-      "Estudo de criatura extraterrestre com foco em anatomia, expressão e contraste de materiais para construir uma presença visual reconhecível.",
-  },
+  { key: "varkos", title: "Varkos — Tyrannosaurus Rex", artstationId: "P4el1L", categories: ["criaturas"], images: ["covers/varkos-trex"] },
+  { key: "virex", title: "Virex, the Hollow Seer", artstationId: "qJx8bz", categories: ["criaturas"], images: ["covers/virex"] },
+  { key: "wolf", title: "Wolf Skull: Desert Relic", artstationId: "qJGWBL", categories: ["criaturas", "ambientes"], images: ["covers/wolf-skull"] },
+  { key: "xenoform", title: "Xenoform: Specimen 01", artstationId: "P6lwZL", categories: ["criaturas"], images: ["covers/xenoform"] },
 ];
 
-export const disciplines = [
-  ["01", "3D Modeling", "Hard surface, props e escultura orgânica com atenção à silhueta e aos materiais."],
-  ["02", "Level Design", "Espaços que orientam o jogador, do primeiro blocking à composição final."],
-  ["03", "Unreal Engine", "Ambientes em tempo real, iluminação, Blueprints e experiências interativas."],
-  ["04", "Cinematics", "Narrativa visual, câmera, ritmo e sequências criadas dentro da Unreal Engine."],
-];
-
-// Ferramentas e competências, exatamente como constam no currículo.
-export const toolkit = [
-  { group: "Engines", items: ["Unreal Engine 5", "Unity"] },
-  { group: "Modelagem 3D", items: ["Autodesk Maya", "Blender", "ZBrush"] },
-  { group: "Texturização", items: ["Substance 3D Painter"] },
-  {
-    group: "Game art",
-    items: ["Environment art", "Level design", "World building", "Blockout", "Narrativa ambiental", "Composição visual"],
-  },
-  { group: "Produção", items: ["LODs", "Otimização de performance", "Pipeline de assets", "Diversion"] },
-];
-
-// Experiência profissional (currículo PT-BR).
-export const experience = [
-  {
-    when: "Mai – Jun 2026",
-    place: "Salas Games · Remoto",
-    role: "Level Designer | Artista 3D",
-    points: [
-      "Ambientes e níveis em Unity, de blockout à composição visual.",
-      "Modelagem de assets, LODs e otimização de performance.",
-      "Trabalho com equipes de Arte, Design e Programação.",
-    ],
-  },
-  {
-    when: "2 anos",
-    place: "Zion Escola de Entretenimento · Santo Amaro, SP",
-    role: "Estágio em Game Design",
-    points: [
-      "Projetos de game design, documentação e prototipagem.",
-      "Modelagem 3D, ambientes, level design e design de mecânicas.",
-      "Produção em Unreal Engine.",
-    ],
-  },
-];
-
-export const freelance = [
-  {
-    name: "Revee",
-    role: "Environment Artist",
-    text: "Ambientes na Unreal Engine, com ambientação do Estádio do Canindé e do Teatro Municipal de São Paulo.",
-  },
-  {
-    name: "CINEP",
-    role: "Artista 3D",
-    text: "Resort em realidade virtual: UVs, texturização, organização de malha e preparação dos modelos para VR.",
-  },
-  {
-    name: "Projetos de jogos Roblox",
-    role: "Artista 3D",
-    text: "Criaturas estilizadas e props para experiências de dois dos principais criadores de conteúdo de Roblox do Brasil.",
-  },
-];
-
-export const education = [
-  { title: "Tecnólogo em Game Design", place: "Zion Escola de Entretenimento", note: "Curso concluído" },
-  { title: "Inglês avançado (B2)", place: "CNA Inglês Definitivo · leitura técnica e colaboração com equipes internacionais", note: "Certificação" },
-];
-
-export const stats = [
-  { value: projects.length, label: "projetos em destaque" },
-  { value: 3, label: "projetos freelance" },
-  { value: 2, suffix: " anos", label: "em game design na Zion" },
-  { value: 2, label: "engines: Unreal 5 e Unity" },
-];
+// Números do topo (os rótulos estão em copy.hero.stats, na mesma ordem).
+export const stats = [{ value: projects.length }, { value: 3 }, { value: 2, years: true }, { value: 3 }];

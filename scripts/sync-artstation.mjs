@@ -83,7 +83,9 @@ async function main() {
   } catch {
     /* primeira execução */
   }
-  if (previous && JSON.stringify(previous.items) === JSON.stringify(items)) {
+  const unchanged = previous && JSON.stringify(previous.items) === JSON.stringify(items);
+  // Na Vercel a cópia de build é descartável: sempre carimba a data, e "Atualizado em" mostra a última busca bem-sucedida.
+  if (unchanged && !process.env.VERCEL) {
     console.log(`[artstation] sem mudanças (${items.length} projetos).`);
     return;
   }

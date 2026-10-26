@@ -19,23 +19,46 @@ O resultado é gerado em `dist/` e pode ser publicado diretamente na Vercel.
 
 ## Estrutura e conteúdo
 
-- `src/data.js`: **todo o conteúdo** (projetos da galeria, ferramentas, experiência, formação e números do topo). Para adicionar um projeto, coloque a imagem em `public/work/` e inclua um item em `projects`; a galeria, o filtro e o lightbox se ajustam sozinhos.
-- `src/App.jsx`: seções e componentes. `src/hooks.jsx`: animações de rolagem, destaque do menu e contadores. `src/styles.css`: visual (cores e fontes em `:root`).
-- Fontes (Space Grotesk e JetBrains Mono) são auto-hospedadas via `@fontsource-variable`, sem requisições ao Google.
-- Os números do topo e o texto de "Trajetória" vêm dos currículos em `public/cv/`; ao atualizá-los, atualize `src/data.js` também.
+| Arquivo | O que tem |
+|---|---|
+| `src/copy.js` | **Todos os textos**, em português e inglês (interface, projetos, experiência, formação, ferramentas) |
+| `src/data.js` | Estrutura que não depende de idioma: projetos (chaves, categorias, imagens), WhatsApp, números do topo |
+| `src/gallery.js` | Monta as galerias no idioma escolhido, juntando os projetos curados com o ArtStation |
+| `src/i18n.jsx` | Idioma (detecção, troca, memória, `<html lang>`, título) |
+| `src/App.jsx` · `src/hooks.jsx` · `src/styles.css` | Seções, animações de rolagem e visual (cores e fontes em `:root`) |
+| `src/work-manifest.json` | Tamanhos das imagens otimizadas de `public/work/` (gerado por `scripts/optimize-image.mjs`) |
+| `public/cv/` | Os currículos em PDF (os links do site apontam para estes dois arquivos) |
+
+Fontes (Space Grotesk e JetBrains Mono) são auto-hospedadas via `@fontsource-variable`, sem requisições ao Google.
+Os números do topo e a "Trajetória" seguem os currículos em `public/cv/`; ao atualizá-los, atualize `src/copy.js` também.
+
+### Idiomas (PT / EN)
+O site abre no idioma do navegador (português → PT; qualquer outro → EN), lembra a escolha do visitante e aceita `?lang=pt` ou `?lang=en` na URL (útil para compartilhar). A troca atualiza `<html lang>`, o título e a descrição, para tradutores automáticos e leitores de tela agirem certo; a página é remontada ao trocar de idioma, o que evita erros com a tradução automática do Chrome.
+Nomes de projetos, empresas e ferramentas não são traduzidos (`translate="no"`).
+
+### Adicionar um projeto à galeria
+1. Otimize as imagens (uma por vez; a primeira será a capa):
+   ```bash
+   npm install --no-save sharp          # uma vez; não faz parte do site
+   node scripts/optimize-image.mjs "caminho/render.png" meu-projeto/01-capa
+   ```
+   Isso gera `public/work/meu-projeto/01-capa-{640,1280,1920}.webp` e atualiza o manifesto. Use `--crop esquerda,topo,largura,altura` para recortar (por exemplo, para tirar a interface de um editor).
+2. Em `src/data.js`, inclua o projeto em `projects` (`key`, `title`, `categories`, `images`).
+3. Em `src/copy.js`, inclua os textos em `pt.projects.<key>` e `en.projects.<key>` (`subtitle`, `description`, `tags` e um `alt` por imagem).
 
 ## ArtStation
 
-A faixa "Novidades no ArtStation" e as galerias de várias imagens (por exemplo Varkos e Virex) vêm do **feed RSS oficial** do perfil, gravado em `src/artstation.generated.json`. O navegador do visitante nunca chama o ArtStation: o site lê só esse arquivo.
+A faixa "Novidades no ArtStation" e as galerias completas (Varkos, Virex, Wolf Skull, Xenoform) vêm do **feed RSS oficial** do perfil, gravado em `src/artstation.generated.json`. O navegador do visitante nunca chama o ArtStation: o site lê só esse arquivo.
 
 ```bash
 npm run sync:artstation   # busca o feed e atualiza o arquivo (também roda antes de cada build)
 ```
 
-- **Limites do feed:** o ArtStation não tem API pública e só publica os **6 projetos mais recentes** no RSS; projetos mais antigos continuam na galeria curada (`src/data.js`). Para um projeto antigo ter várias imagens, o título dele em `src/data.js` precisa ser idêntico ao do ArtStation.
+- **Limites do feed:** o ArtStation não tem API pública e só publica os **6 projetos mais recentes** no RSS; os mais antigos continuam na galeria curada (`src/data.js`).
+- **Ligação com a galeria:** cada projeto pode ter `artstationId` em `src/data.js` (o código está na URL do projeto: `artstation.com/artwork/<código>`); sem ele, só liga se o título for idêntico. Projetos do feed que não estão na galeria vão para "Novidades".
+- **Textos e créditos** vêm do ArtStation, em inglês. A tradução para português fica em `artstationPt` (`src/copy.js`, por código de projeto); sem tradução, o texto original é usado. **Mantenha os créditos** (conceito de outros artistas, cursos).
 - **Não quebra o build:** se o ArtStation estiver fora do ar, bloquear a requisição ou mudar o formato, o script avisa e mantém o último arquivo salvo.
 - O script se identifica com um User-Agent próprio e não tenta contornar a proteção do site. Não troque isso por um User-Agent de navegador.
-- Textos e créditos vêm do ArtStation (em inglês); ficam exatamente como foram publicados lá.
 - Para publicar projetos novos: rode o comando, confira `git diff src/artstation.generated.json`, faça commit e envie.
 
 ## Publicação na Vercel
