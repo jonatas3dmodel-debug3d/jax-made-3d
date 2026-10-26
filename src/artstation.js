@@ -23,14 +23,15 @@ const gallery = (title, images) => images.map((src, index) => ({ src, alt: `${ti
  * Cruza a galeria curada com o ArtStation:
  * - projeto curado com o mesmo título ganha todas as imagens do projeto e o link para ele;
  * - projeto do ArtStation que ainda não está na galeria vai para `recent`.
- * A comparação é por título idêntico (sem acentos, caixa ou pontuação); nada é adivinhado.
+ * A associação é pelo `artstationId` do projeto (quando o título difere entre o site e o ArtStation) ou por título
+ * idêntico (sem acentos, caixa ou pontuação); nada é adivinhado.
  */
 export function mergeArtstation(projects) {
   const byTitle = new Map(items.map((item) => [normalize(item.title), item]));
   const matched = new Set();
 
   const curated = projects.map((project) => {
-    const item = byTitle.get(normalize(project.title));
+    const item = items.find((entry) => entry.id === project.artstationId) ?? byTitle.get(normalize(project.title));
     if (!item) return project;
     matched.add(item.id);
     return { ...project, images: gallery(project.title, item.images), artstationUrl: item.url };

@@ -47,6 +47,7 @@ export const projects = [
   },
   {
     title: "Varkos — Tyrannosaurus Rex",
+    artstationId: "P4el1L",
     subtitle: "ZBrush · Creature modeling",
     image: "/work/varkos-trex.webp",
     ratio: "1920 / 1536",
@@ -58,6 +59,7 @@ export const projects = [
   },
   {
     title: "Virex, the Hollow Seer",
+    artstationId: "qJx8bz",
     subtitle: "ZBrush · Organic sculpting",
     image: "/work/virex.webp",
     ratio: "1480 / 833",
@@ -69,6 +71,7 @@ export const projects = [
   },
   {
     title: "Wolf Skull: Desert Relic",
+    artstationId: "qJGWBL",
     subtitle: "ZBrush · Unreal Engine",
     image: "/work/wolf-skull.webp",
     ratio: "2400 / 1290",
@@ -80,6 +83,7 @@ export const projects = [
   },
   {
     title: "Xenoform: Specimen 01",
+    artstationId: "P6lwZL",
     subtitle: "ZBrush · Creature design",
     image: "/work/xenoform.webp",
     ratio: "2000 / 1600",
