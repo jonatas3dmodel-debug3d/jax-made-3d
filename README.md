@@ -59,7 +59,8 @@ npm run sync:artstation   # busca o feed e atualiza o arquivo (também roda ante
 - **Textos e créditos** vêm do ArtStation, em inglês. A tradução para português fica em `artstationPt` (`src/copy.js`, por código de projeto); sem tradução, o texto original é usado. **Mantenha os créditos** (conceito de outros artistas, cursos).
 - **Não quebra o build:** se o ArtStation estiver fora do ar, bloquear a requisição ou mudar o formato, o script avisa e mantém o último arquivo salvo.
 - O script se identifica com um User-Agent próprio e não tenta contornar a proteção do site. Não troque isso por um User-Agent de navegador.
-- Para publicar projetos novos: rode o comando, confira `git diff src/artstation.generated.json`, faça commit e envie.
+- **Atualização automática:** o fluxo `.github/workflows/sync-artstation.yml` roda todo dia (e sob demanda, na aba Actions), busca o feed e, se houver projeto novo ou alterado, grava o arquivo na `main`; esse envio faz a Vercel publicar de novo. (A busca durante o build da Vercel não funcionou, por isso a rotina fica no GitHub.) Projetos novos entram em "Novidades" com o texto original em inglês até alguém adicionar a tradução em `artstationPt`.
+- Manualmente: rode `npm run sync:artstation`, confira `git diff src/artstation.generated.json`, faça commit e envie.
 
 ## Publicação na Vercel
 

@@ -1,0 +1,38 @@
+# Atualiza os projetos recentes do ArtStation (feed RSS oficial) todos os dias.
+# Se algo mudou, grava src/artstation.generated.json na branch main; o envio faz a Vercel publicar de novo.
+# Para rodar na hora: aba Actions > "Atualizar ArtStation" > Run workflow.
+name: Atualizar ArtStation
+
+on:
+  schedule:
+    - cron: "17 9 * * *" # todo dia, 09:17 UTC (06:17 em Brasília)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-artstation
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Buscar o feed do ArtStation
+        run: node scripts/sync-artstation.mjs
+      - name: Gravar se houve mudança
+        run: |
+          if git diff --quiet -- src/artstation.generated.json; then
+            echo "Sem novos projetos no ArtStation."
+            exit 0
+          fi
+          git config user.name "artstation-sync[bot]"
+          git config user.email "artstation-sync@users.noreply.github.com"
+          git add src/artstation.generated.json
+          git commit -m "Atualiza projetos do ArtStation"
+          git push
