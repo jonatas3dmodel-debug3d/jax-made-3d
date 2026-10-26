@@ -1,213 +1,450 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  artstation,
+  disciplines,
+  education,
+  email,
+  experience,
+  filters,
+  freelance,
+  projects,
+  stats,
+  toolkit,
+} from "./data.js";
+import { CountUp, prefersReducedMotion, useReveal, useScrollEffects, useScrollSpy } from "./hooks.jsx";
 
-const artstation = "https://www.artstation.com/jonatas_araujo";
-const email = "jonatas3dmodel@gmail.com";
 const contactEndpoint = `https://formsubmit.co/ajax/${email}`;
 
-const projects = [
-  {
-    index: "01",
-    title: "Revee Company",
-    subtitle: "Freelancer · Real-time environment",
-    image: "/work/stadium-night.webp",
-    className: "project project--wide",
-    alt: "Ambiente 3D noturno de um estádio iluminado",
-    description:
-      "Ambiente em tempo real desenvolvido para uma experiência imersiva, com foco em escala, atmosfera noturna e leitura arquitetônica.",
-  },
-  {
-    index: "02",
-    title: "ResortVR Sorocaba",
-    subtitle: "Freelancer · Architectural visualization",
-    image: "/work/full-resort.webp",
-    className: "project project--tall",
-    alt: "Vista aérea renderizada de um resort tropical",
-    description:
-      "Visualização arquitetônica de um resort completo para experiência em realidade virtual, unindo composição, paisagismo e navegação espacial.",
-  },
-  {
-    index: "03",
-    title: "Block 406",
-    subtitle: "Game jam · Level design",
-    image: "/work/block-406.webp",
-    className: "project",
-    alt: "Lobby de apartamento criado em Unreal Engine",
-    description:
-      "Level design criado para game jam, trabalhando progressão, fluxo do jogador, objetivos e construção de atmosfera em Unreal Engine.",
-  },
-  {
-    index: "04",
-    title: "Varkos — Tyrannosaurus Rex",
-    subtitle: "ZBrush · Creature modeling",
-    image: "/work/varkos-trex.webp",
-    className: "project",
-    alt: "Modelo 3D realista do Tyrannosaurus Rex Varkos",
-    description:
-      "Realistic T. rex study focused on anatomy, skin detail, texturing and final presentation.",
-  },
-  {
-    index: "05",
-    title: "Virex, the Hollow Seer",
-    subtitle: "ZBrush · Organic sculpting",
-    image: "/work/virex.webp",
-    className: "project",
-    alt: "Escultura digital de criatura chamada Virex",
-    description:
-      "Criatura autoral esculpida em ZBrush, explorando anatomia fantástica, silhueta e uma identidade visual inquietante.",
-  },
-  {
-    index: "06",
-    title: "Wolf Skull: Desert Relic",
-    subtitle: "ZBrush · Unreal Engine",
-    image: "/work/wolf-skull.webp",
-    className: "project project--wide",
-    alt: "Crânio de lobo modelado em primeiro plano em um ambiente desértico",
-    description:
-      "Escultura anatômica apresentada em um cenário autoral no Unreal Engine, combinando modelagem orgânica, materiais e direção de atmosfera.",
-  },
-  {
-    index: "07",
-    title: "Xenoform: Specimen 01",
-    subtitle: "ZBrush · Creature design",
-    image: "/work/xenoform.webp",
-    className: "project",
-    alt: "Busto de criatura alienígena com pele azul acinzentada e estruturas alaranjadas",
-    description:
-      "Estudo de criatura extraterrestre com foco em anatomia, expressão e contraste de materiais para construir uma presença visual reconhecível.",
-  },
-];
-
-const disciplines = [
-  ["01", "3D Modeling", "Hard surface, props e escultura orgânica com atenção à silhueta e aos materiais."],
-  ["02", "Level Design", "Espaços que orientam o jogador, do primeiro blocking à composição final."],
-  ["03", "Unreal Engine", "Ambientes em tempo real, iluminação, Blueprints e experiências interativas."],
-  ["04", "Cinematics", "Narrativa visual, câmera, ritmo e sequências criadas dentro da Unreal Engine."],
+const navLinks = [
+  ["trabalhos", "Trabalhos"],
+  ["sobre", "Sobre"],
+  ["experiencia", "Experiência"],
+  ["contato", "Contato"],
 ];
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export default function Home() {
-  const mainRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [sendStatus, setSendStatus] = useState("idle");
-  const activeProject = activeIndex === null ? null : projects[activeIndex];
+/* -------------------------------------------------------------------------------------------- */
+function Header({ active }) {
+  const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
-    const root = mainRef.current;
-    if (!root) return undefined;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const topbar = root.querySelector(".topbar");
-    const revealItems = root.querySelectorAll(".reveal");
-    const projectItems = root.querySelectorAll(".project");
-    let animationFrame = 0;
-
-    requestAnimationFrame(() => root.classList.add("is-loaded"));
-
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          revealObserver.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.13, rootMargin: "0px 0px -7% 0px" },
-    );
-
-    revealItems.forEach((item) => revealObserver.observe(item));
-
-    const updateScroll = () => {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = requestAnimationFrame(() => {
-        const scrollTop = window.scrollY;
-        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = scrollable > 0 ? scrollTop / scrollable : 0;
-
-        root.style.setProperty("--scroll-progress", progress.toFixed(4));
-        root.style.setProperty("--hero-scroll", `${Math.min(scrollTop * 0.12, 90)}px`);
-        topbar?.classList.toggle("is-scrolled", scrollTop > 32);
-      });
-    };
-
-    const updatePointer = (event) => {
-      if (reducedMotion) return;
-      const x = event.clientX / window.innerWidth;
-      const y = event.clientY / window.innerHeight;
-      root.style.setProperty("--pointer-x", `${event.clientX}px`);
-      root.style.setProperty("--pointer-y", `${event.clientY}px`);
-      root.style.setProperty("--hero-x", `${(x - 0.5) * -18}px`);
-      root.style.setProperty("--hero-y", `${(y - 0.5) * -12}px`);
-    };
-
-    const projectCleanups = [];
-    projectItems.forEach((project) => {
-      const handleMove = (event) => {
-        if (reducedMotion) return;
-        const rect = project.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width;
-        const y = (event.clientY - rect.top) / rect.height;
-        project.style.setProperty("--tilt-x", `${(0.5 - y) * 2.2}deg`);
-        project.style.setProperty("--tilt-y", `${(x - 0.5) * 2.2}deg`);
-        project.style.setProperty("--shine-x", `${x * 100}%`);
-        project.style.setProperty("--shine-y", `${y * 100}%`);
-      };
-      const handleLeave = () => {
-        project.style.setProperty("--tilt-x", "0deg");
-        project.style.setProperty("--tilt-y", "0deg");
-      };
-
-      project.addEventListener("pointermove", handleMove);
-      project.addEventListener("pointerleave", handleLeave);
-      projectCleanups.push(() => {
-        project.removeEventListener("pointermove", handleMove);
-        project.removeEventListener("pointerleave", handleLeave);
-      });
-    });
-
-    updateScroll();
-    window.addEventListener("scroll", updateScroll, { passive: true });
-    window.addEventListener("pointermove", updatePointer, { passive: true });
-
+    if (!open) return undefined;
+    const previous = document.body.style.overflow;
+    const onKey = (event) => event.key === "Escape" && close();
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
     return () => {
-      cancelAnimationFrame(animationFrame);
-      revealObserver.disconnect();
-      projectCleanups.forEach((cleanup) => cleanup());
-      window.removeEventListener("scroll", updateScroll);
-      window.removeEventListener("pointermove", updatePointer);
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, close]);
+
+  return (
+    <header className={`topbar${open ? " is-open" : ""}`}>
+      <span className="topbar__progress" aria-hidden="true" />
+      <a className="brand" href="#top" aria-label="JAX MADE 3D, início" onClick={close}>
+        <img src="/jax-made-logo.webp" alt="" width="42" height="42" />
+        <span>
+          JAX MADE <b>3D</b>
+        </span>
+      </a>
+
+      <nav id="menu" className="topbar__nav" aria-label="Navegação principal">
+        {navLinks.map(([id, label]) => (
+          <a key={id} href={`#${id}`} aria-current={active === id ? "true" : undefined} onClick={close}>
+            {label}
+          </a>
+        ))}
+        <a href={artstation} target="_blank" rel="noreferrer" onClick={close}>
+          ArtStation <Arrow />
+        </a>
+        <a className="button button--primary topbar__nav-cta" href="#contato" onClick={close}>
+          Vamos conversar <Arrow />
+        </a>
+      </nav>
+
+      <div className="topbar__actions">
+        <a className="button button--primary button--small topbar__cta" href="#contato">
+          Vamos conversar
+        </a>
+        <button
+          className="topbar__burger"
+          type="button"
+          aria-expanded={open}
+          aria-controls="menu"
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          onClick={() => setOpen((value) => !value)}
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
+      </div>
+    </header>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------- */
+function Hero() {
+  return (
+    <section className="hero" id="top" aria-labelledby="hero-title">
+      <img
+        className="hero__image"
+        src="/work/environment-night.webp"
+        alt="Ambiente 3D noturno criado por Jonatas Araújo"
+        width="1325"
+        height="894"
+        fetchPriority="high"
+        decoding="async"
+      />
+      <div className="hero__veil" />
+      <div className="hero__grid" aria-hidden="true" />
+      <div className="hero__scan" aria-hidden="true" />
+      <div className="hero__signal" aria-hidden="true">
+        <span>ENV / 3D</span>
+        <i />
+        <span>REALTIME</span>
+      </div>
+
+      <div className="hero__content">
+        <div className="eyebrow">
+          <i /> Jonatas Araújo · Artista 3D · São Paulo
+        </div>
+        <h1 id="hero-title">
+          Mundos que existem
+          <span>antes de ganhar vida.</span>
+        </h1>
+        <p>
+          Ambientes, level design e cinematics em Unreal Engine e Unity, construídos com intenção, atmosfera e detalhe,
+          do blockout à otimização.
+        </p>
+        <div className="hero__actions">
+          <a className="button button--primary" href="#trabalhos">
+            Explorar projetos <span aria-hidden="true">↓</span>
+          </a>
+          <a className="button button--glass" href="#contato">
+            Iniciar contato <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <div className="hero__bar">
+        <ul className="hero__stats" aria-label="Resumo">
+          {stats.map((stat) => (
+            <li key={stat.label}>
+              <strong>
+                <CountUp value={stat.value} suffix={stat.suffix} />
+              </strong>
+              <span>{stat.label}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="availability">
+          <i /> Disponível para projetos
+        </p>
+      </div>
+
+      <div className="hero__mark" aria-hidden="true">
+        JAX / 3D
+      </div>
+      <a className="hero__scroll" href="#trabalhos" aria-label="Ir para os projetos">
+        <span>Scroll to explore</span>
+        <i aria-hidden="true" />
+      </a>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------- */
+function Lightbox({ items, index, onChange, onClose }) {
+  const dialogRef = useRef(null);
+  const project = items[index];
+
+  useEffect(() => {
+    const opener = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.querySelector(".lightbox__close")?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (opener instanceof HTMLElement) opener.focus();
     };
   }, []);
 
   useEffect(() => {
-    if (activeIndex === null) return undefined;
-
-    const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") setActiveIndex(null);
-      if (event.key === "ArrowLeft") {
-        setActiveIndex((current) => (current - 1 + projects.length) % projects.length);
-      }
-      if (event.key === "ArrowRight") {
-        setActiveIndex((current) => (current + 1) % projects.length);
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose();
+      if (event.key === "ArrowLeft") onChange(-1);
+      if (event.key === "ArrowRight") onChange(1);
+      if (event.key === "Tab") {
+        const focusable = [...dialogRef.current.querySelectorAll("button")];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onChange, onClose]);
 
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
+  return (
+    <div
+      className="lightbox"
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lightbox-title"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <button className="lightbox__close" type="button" onClick={onClose} aria-label="Fechar galeria">
+        Fechar <span aria-hidden="true">×</span>
+      </button>
+      <button className="lightbox__nav lightbox__nav--prev" type="button" onClick={() => onChange(-1)} aria-label="Projeto anterior">
+        ←
+      </button>
+      <figure className="lightbox__figure" key={project.title}>
+        <img src={project.image} alt={project.alt} />
+        <figcaption>
+          <span>
+            {String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+          </span>
+          <div>
+            <small>{project.subtitle}</small>
+            <h2 id="lightbox-title">{project.title}</h2>
+            <p>{project.description}</p>
+            <ul className="chips" aria-label="Ferramentas e disciplinas">
+              {project.tags.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </figcaption>
+      </figure>
+      <button className="lightbox__nav lightbox__nav--next" type="button" onClick={() => onChange(1)} aria-label="Próximo projeto">
+        →
+      </button>
+    </div>
+  );
+}
 
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [activeIndex]);
-
-  const changeProject = (direction) => {
-    setActiveIndex((current) => (current + direction + projects.length) % projects.length);
+/* -------------------------------------------------------------------------------------------- */
+function Work({ filter, setFilter, items, onOpen }) {
+  const tilt = (event) => {
+    if (prefersReducedMotion()) return;
+    const card = event.target.closest?.(".project");
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+    card.style.setProperty("--tilt-x", `${(0.5 - y) * 2.2}deg`);
+    card.style.setProperty("--tilt-y", `${(x - 0.5) * 2.2}deg`);
+    card.style.setProperty("--shine-x", `${x * 100}%`);
+    card.style.setProperty("--shine-y", `${y * 100}%`);
+  };
+  const untilt = (event) => {
+    const card = event.target.closest?.(".project");
+    if (!card || card.contains(event.relatedTarget)) return;  // still inside the same card
+    card.style.setProperty("--tilt-x", "0deg");
+    card.style.setProperty("--tilt-y", "0deg");
   };
 
-  const handleContactSubmit = async (event) => {
+  return (
+    <section className="work section" id="trabalhos" aria-labelledby="work-title">
+      <div className="section__head reveal">
+        <div>
+          <span className="section__index">/ 01</span>
+          <h2 id="work-title">Trabalhos selecionados</h2>
+        </div>
+        <p>
+          Uma galeria curada entre trabalhos profissionais, ambientes em tempo real, level design e escultura digital.
+          Clique em uma imagem para ampliar.
+        </p>
+      </div>
+
+      <div className="filters reveal" role="group" aria-label="Filtrar trabalhos">
+        {filters.map(({ key, label }) => {
+          const count = key === "all" ? projects.length : projects.filter((p) => p.categories.includes(key)).length;
+          return (
+            <button key={key} type="button" aria-pressed={filter === key} onClick={() => setFilter(key)}>
+              {label} <small>{String(count).padStart(2, "0")}</small>
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="sr-only" role="status">
+        {items.length} {items.length === 1 ? "trabalho exibido" : "trabalhos exibidos"}
+      </p>
+      <div
+        className={`project-grid ${filter === "all" ? "is-editorial" : "is-uniform"}`}
+        onPointerMove={tilt}
+        onPointerOut={untilt}
+      >
+        {items.map((project, index) => (
+          <button
+            type="button"
+            className={`project reveal${filter === "all" && project.layout ? ` project--${project.layout}` : ""}`}
+            key={`${filter}-${project.title}`}
+            onClick={() => onOpen(index)}
+            aria-label={`${project.title}, ampliar imagem na galeria`}
+            style={{ "--reveal-delay": `${(index % 2) * 110}ms`, "--ratio": project.ratio }}
+          >
+            <img src={project.image} alt={project.alt} loading="lazy" decoding="async" />
+            <span className="project__shade" />
+            <span className="project__shine" aria-hidden="true" />
+            <span className="project__number">{String(projects.indexOf(project) + 1).padStart(2, "0")}</span>
+            <span className="project__copy">
+              <small>{project.subtitle}</small>
+              <strong>{project.title}</strong>
+            </span>
+            <span className="project__open" aria-hidden="true">
+              ＋
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <a className="text-link reveal" href="#contato">
+        Gostou do trabalho? Vamos conversar <Arrow />
+      </a>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------- */
+function About() {
+  return (
+    <section className="about section" id="sobre" aria-labelledby="about-title">
+      <div className="about__intro reveal">
+        <span className="section__index">/ 02</span>
+        <p className="about__kicker">O que eu faço</p>
+        <h2 id="about-title">
+          Entre a forma e a função,
+          <em>eu construo presença.</em>
+        </h2>
+        <p className="about__body">
+          Sou Jonatas Araújo, artista 3D focado em transformar ideias em espaços, personagens e cenas que convidam o olhar
+          a permanecer. Meu processo une sensibilidade visual e lógica de produção, da primeira massa cinza ao render
+          final.
+        </p>
+        <p className="about__body">
+          Trabalho com environment art, level design e world building em Unity e Unreal Engine 5, em projetos nacionais e
+          internacionais, do blockout e da criação de assets até a montagem de cenas e a otimização de performance.
+        </p>
+        <a className="text-link" href={artstation} target="_blank" rel="noreferrer">
+          Conheça meu ArtStation <Arrow />
+        </a>
+      </div>
+
+      <div className="disciplines">
+        {disciplines.map(([number, title, text]) => (
+          <article className="reveal" key={title} style={{ "--reveal-delay": `${Number(number) * 70}ms` }}>
+            <span>{number}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="toolkit reveal">
+        <h3>Ferramentas e competências</h3>
+        <dl>
+          {toolkit.map(({ group, items }) => (
+            <div key={group}>
+              <dt>{group}</dt>
+              <dd>
+                <ul className="chips chips--light">
+                  {items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------- */
+function Experience() {
+  return (
+    <section className="experience section" id="experiencia" aria-labelledby="experience-title">
+      <div className="experience__head reveal">
+        <span className="section__index">/ 03</span>
+        <h2 id="experience-title">Trajetória</h2>
+        <p>
+          Do estágio em game design a projetos para clientes e estúdios: sempre perto do pipeline, da primeira ideia ao
+          asset pronto para o jogo.
+        </p>
+        <a className="text-link" href="/cv/Curriculo-Jonatas-Araujo-PT-BR.pdf" target="_blank" rel="noreferrer">
+          Baixar currículo <Arrow />
+        </a>
+      </div>
+
+      <div className="experience__body">
+        <ol className="timeline">
+          {experience.map((item) => (
+            <li className="reveal" key={item.place}>
+              <span className="timeline__when">{item.when}</span>
+              <h3>{item.role}</h3>
+              <p className="timeline__place">{item.place}</p>
+              <ul>
+                {item.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+
+        <div className="experience__block reveal">
+          <h3>Projetos freelance</h3>
+          <div className="cards">
+            {freelance.map((item) => (
+              <article key={item.name}>
+                <small>{item.role}</small>
+                <h4>{item.name}</h4>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="experience__block reveal">
+          <h3>Formação</h3>
+          <div className="cards cards--two">
+            {education.map((item) => (
+              <article key={item.title}>
+                <small>{item.note}</small>
+                <h4>{item.title}</h4>
+                <p>{item.place}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------- */
+function Contact() {
+  const [sendStatus, setSendStatus] = useState("idle");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -225,9 +462,7 @@ export default function Home() {
         body: formData,
         headers: { Accept: "application/json" },
       });
-
       if (!response.ok) throw new Error("Não foi possível enviar a mensagem.");
-
       form.reset();
       setSendStatus("success");
     } catch {
@@ -236,310 +471,126 @@ export default function Home() {
   };
 
   return (
-    <main className="site-shell" ref={mainRef}>
-      <div className="cursor-aura" aria-hidden="true" />
-      <header className="topbar">
-        <span className="topbar__progress" aria-hidden="true" />
-        <a className="brand" href="#top" aria-label="JAX MADE 3D, início">
-          <img src="/jax-made-logo.webp" alt="" />
-          <span>JAX MADE <b>3D</b></span>
-        </a>
-        <nav aria-label="Navegação principal">
-          <a href="#trabalhos">Trabalhos</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#contato">Contato</a>
-        </nav>
-        <a className="topbar__cta" href={artstation} target="_blank" rel="noreferrer">
-          ArtStation <Arrow />
-        </a>
-      </header>
+    <section className="contact section" id="contato" aria-labelledby="contact-title">
+      <div className="contact__visual reveal">
+        <img src="/profile/jonatas-araujo.webp" alt="Retrato profissional de Jonatas Araújo" width="900" height="1200" loading="lazy" />
+        <span aria-hidden="true">EST. 2025</span>
+      </div>
+      <div className="contact__copy reveal" style={{ "--reveal-delay": "120ms" }}>
+        <span className="section__index">/ 04</span>
+        <p>Tem uma ideia, um mundo ou uma cena para construir?</p>
+        <h2 id="contact-title">Vamos criar algo que mereça ser explorado.</h2>
 
-      <section className="hero" id="top" aria-labelledby="hero-title">
-        <img
-          className="hero__image"
-          src="/work/environment-night.webp"
-          alt="Ambiente 3D noturno criado por Jonatas Araújo"
-        />
-        <div className="hero__veil" />
-        <div className="hero__grid" aria-hidden="true" />
-        <div className="hero__scan" aria-hidden="true" />
-        <div className="hero__signal" aria-hidden="true">
-          <span>ENV / 3D</span>
-          <i />
-          <span>REALTIME</span>
-        </div>
-
-        <div className="hero__content">
-          <div className="eyebrow"><i /> Jonatas Araújo · 3D Artist</div>
-          <h1 id="hero-title">
-            Mundos que existem
-            <span>antes de ganhar vida.</span>
-          </h1>
-          <p>
-            Modelagem 3D, level design e experiências cinematográficas em
-            Unreal Engine, construídas com intenção, atmosfera e detalhe.
-          </p>
-          <div className="hero__actions">
-            <a className="button button--primary magnetic" href="#trabalhos">
-              Explorar projetos <span aria-hidden="true">↓</span>
-            </a>
-            <a className="button button--glass magnetic" href="#contato">
-              Iniciar contato <span aria-hidden="true">↓</span>
-            </a>
-          </div>
-        </div>
-
-        <div className="hero__meta" aria-label="Informações rápidas">
-          <span>Based in Brazil</span>
-          <span>Unreal · Blender · ZBrush</span>
-          <span className="availability"><i /> Disponível para projetos</span>
-        </div>
-
-        <div className="hero__mark" aria-hidden="true">JAX / 3D</div>
-        <a className="hero__scroll" href="#trabalhos" aria-label="Ir para os projetos">
-          <span>Scroll to explore</span>
-          <i aria-hidden="true" />
-        </a>
-      </section>
-
-      <section className="work section" id="trabalhos" aria-labelledby="work-title">
-        <div className="section__head reveal">
-          <div>
-            <span className="section__index">/ 01</span>
-            <h2 id="work-title">Selected work</h2>
-          </div>
-          <p>
-            Uma galeria curada entre trabalhos profissionais, ambientes em tempo real,
-            level design e escultura digital. Clique em uma imagem para ampliar.
-          </p>
-        </div>
-
-        <div className="project-grid">
-          {projects.map((project, index) => (
-            <button
-              type="button"
-              className={`${project.className} reveal`}
-              key={project.title}
-              onClick={() => setActiveIndex(index)}
-              aria-label={`${project.title}, ampliar imagem na galeria`}
-              style={{ "--reveal-delay": `${(index % 2) * 110}ms` }}
-            >
-              <img src={project.image} alt={project.alt} loading="lazy" />
-              <span className="project__shade" />
-              <span className="project__shine" aria-hidden="true" />
-              <span className="project__number">{project.index}</span>
-              <span className="project__copy">
-                <small>{project.subtitle}</small>
-                <strong>{project.title}</strong>
-              </span>
-              <span className="project__open" aria-hidden="true">＋</span>
-            </button>
-          ))}
-        </div>
-
-        <a className="text-link reveal" href="#contato">
-          Gostou do trabalho? Vamos conversar <Arrow />
-        </a>
-      </section>
-
-      <section className="about section" id="sobre" aria-labelledby="about-title">
-        <div className="about__intro reveal">
-          <span className="section__index">/ 02</span>
-          <p className="about__kicker">What I do</p>
-          <h2 id="about-title">
-            Entre a forma e a função,
-            <em>eu construo presença.</em>
-          </h2>
-          <p className="about__body">
-            Sou Jonatas Araújo, artista 3D focado em transformar ideias em espaços,
-            personagens e cenas que convidam o olhar a permanecer. Meu processo une
-            sensibilidade visual e lógica de produção, da primeira massa cinza ao render final.
-          </p>
-          <a className="text-link" href={artstation} target="_blank" rel="noreferrer">
-            Conheça meu ArtStation <Arrow />
-          </a>
-        </div>
-
-        <div className="disciplines">
-          {disciplines.map(([number, title, text]) => (
-            <article
-              className="reveal"
-              key={title}
-              style={{ "--reveal-delay": `${Number(number) * 70}ms` }}
-            >
-              <span>{number}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="statement" aria-label="Manifesto">
-        <div className="statement__track" aria-hidden="true">
-          MODEL · DESIGN · LIGHT · TELL STORIES · MODEL · DESIGN · LIGHT · TELL STORIES ·
-        </div>
-      </section>
-
-      <section className="contact section" id="contato" aria-labelledby="contact-title">
-        <div className="contact__visual reveal">
-          <img
-            src="/profile/jonatas-araujo.webp"
-            alt="Retrato profissional de Jonatas Araújo"
-            loading="lazy"
-          />
-          <span aria-hidden="true">EST. 2025</span>
-        </div>
-        <div className="contact__copy reveal" style={{ "--reveal-delay": "120ms" }}>
-          <span className="section__index">/ 03</span>
-          <p>Tem uma ideia, um mundo ou uma cena para construir?</p>
-          <h2 id="contact-title">Vamos criar algo que mereça ser explorado.</h2>
-
-          <form className="contact-form" onSubmit={handleContactSubmit}>
-            <div className="contact-form__row">
-              <label>
-                <span>Nome</span>
-                <input
-                  type="text"
-                  name="name"
-                  autoComplete="name"
-                  placeholder="Como posso chamar você?"
-                  required
-                />
-              </label>
-              <label>
-                <span>E-mail</span>
-                <input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="seuemail@exemplo.com"
-                  required
-                />
-              </label>
-            </div>
+        <form className="contact-form" onSubmit={handleSubmit}>
+          <div className="contact-form__row">
             <label>
-              <span>Mensagem</span>
-              <textarea
-                name="message"
-                rows="5"
-                placeholder="Conte um pouco sobre a ideia, projeto ou oportunidade."
-                required
-              />
+              <span>Nome</span>
+              <input type="text" name="name" autoComplete="name" placeholder="Como posso chamar você?" required />
             </label>
-            <input
-              className="contact-form__honey"
-              type="text"
-              name="_honey"
-              tabIndex="-1"
-              autoComplete="off"
-              aria-hidden="true"
-            />
-            <div className="contact-form__footer">
-              <button
-                className="button button--primary"
-                type="submit"
-                disabled={sendStatus === "sending"}
-              >
-                {sendStatus === "sending" ? "Enviando..." : "Enviar mensagem"} <Arrow />
-              </button>
-              <p className={`contact-form__status contact-form__status--${sendStatus}`} role="status">
-                {sendStatus === "success" && "Mensagem enviada. Obrigado pelo contato!"}
-                {sendStatus === "error" && "O envio falhou. Tente novamente em alguns instantes."}
-              </p>
-            </div>
-          </form>
+            <label>
+              <span>E-mail</span>
+              <input type="email" name="email" autoComplete="email" placeholder="seuemail@exemplo.com" required />
+            </label>
+          </div>
+          <label>
+            <span>Mensagem</span>
+            <textarea name="message" rows="5" placeholder="Conte um pouco sobre a ideia, projeto ou oportunidade." required />
+          </label>
+          <input className="contact-form__honey" type="text" name="_honey" tabIndex="-1" autoComplete="off" aria-hidden="true" />
+          <div className="contact-form__footer">
+            <button className="button button--primary" type="submit" disabled={sendStatus === "sending"}>
+              {sendStatus === "sending" ? "Enviando..." : "Enviar mensagem"} <Arrow />
+            </button>
+            <p className={`contact-form__status contact-form__status--${sendStatus}`} role="status">
+              {sendStatus === "success" && "Mensagem enviada. Obrigado pelo contato!"}
+              {sendStatus === "error" && "O envio falhou. Tente novamente em alguns instantes."}
+            </p>
+          </div>
+        </form>
 
-          <div className="contact__resources">
-            <span>Currículos e perfil profissional</span>
-            <div className="contact__actions">
-              <a
-                className="button button--outline"
-                href="/cv/Curriculo-Jonatas-Araujo-PT-BR.pdf"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Currículo PT-BR <Arrow />
-              </a>
-              <a
-                className="button button--outline"
-                href="/cv/Jonatas-Araujo-English-CV.pdf"
-                target="_blank"
-                rel="noreferrer"
-              >
-                English CV <Arrow />
-              </a>
-              <a className="button button--outline" href={artstation} target="_blank" rel="noreferrer">
-                ArtStation <Arrow />
-              </a>
-            </div>
+        <div className="contact__resources">
+          <span>Currículos e perfil profissional</span>
+          <div className="contact__actions">
+            <a className="button button--outline" href="/cv/Curriculo-Jonatas-Araujo-PT-BR.pdf" target="_blank" rel="noreferrer">
+              Currículo PT-BR <Arrow />
+            </a>
+            <a className="button button--outline" href="/cv/Jonatas-Araujo-English-CV.pdf" target="_blank" rel="noreferrer">
+              English CV <Arrow />
+            </a>
+            <a className="button button--outline" href={artstation} target="_blank" rel="noreferrer">
+              ArtStation <Arrow />
+            </a>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------------------------- */
+export default function Home() {
+  const rootRef = useRef(null);
+  const [filter, setFilter] = useState("all");
+  const [activeIndex, setActiveIndex] = useState(null);
+  const active = useScrollSpy(navLinks.map(([id]) => id));
+
+  const items = useMemo(
+    () => (filter === "all" ? projects : projects.filter((project) => project.categories.includes(filter))),
+    [filter],
+  );
+
+  useScrollEffects(rootRef);
+  useReveal(rootRef, [filter]);
+
+  const changeProject = useCallback(
+    (direction) => setActiveIndex((current) => (current + direction + items.length) % items.length),
+    [items.length],
+  );
+  const closeLightbox = useCallback(() => setActiveIndex(null), []);
+
+  return (
+    <div className="site-shell" ref={rootRef}>
+      <a className="skip-link" href="#conteudo">
+        Ir para o conteúdo
+      </a>
+      <div className="cursor-aura" aria-hidden="true" />
+      <Header active={active} />
+
+      <main id="conteudo" tabIndex="-1">
+        <Hero />
+        <Work filter={filter} setFilter={setFilter} items={items} onOpen={setActiveIndex} />
+        <About />
+        <Experience />
+
+        <section className="statement" aria-label="Manifesto">
+          <div className="statement__track" aria-hidden="true">
+            MODEL · DESIGN · LIGHT · TELL STORIES · MODEL · DESIGN · LIGHT · TELL STORIES ·
+          </div>
+        </section>
+
+        <Contact />
+      </main>
 
       <footer>
         <a className="brand" href="#top">
-          <img src="/jax-made-logo.webp" alt="" />
-          <span>JAX MADE <b>3D</b></span>
+          <img src="/jax-made-logo.webp" alt="" width="42" height="42" />
+          <span>
+            JAX MADE <b>3D</b>
+          </span>
         </a>
         <p>© {new Date().getFullYear()} Jonatas Araújo. Todos os direitos reservados.</p>
         <div>
-          <a href={artstation} target="_blank" rel="noreferrer">ArtStation</a>
+          <a href={artstation} target="_blank" rel="noreferrer">
+            ArtStation
+          </a>
           <a href="#contato">Contato</a>
           <a href="#top">Voltar ao topo ↑</a>
         </div>
       </footer>
 
-      {activeProject && (
-        <div
-          className="lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="lightbox-title"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setActiveIndex(null);
-          }}
-        >
-          <button
-            className="lightbox__close"
-            type="button"
-            onClick={() => setActiveIndex(null)}
-            aria-label="Fechar galeria"
-          >
-            Fechar <span aria-hidden="true">×</span>
-          </button>
-          <button
-            className="lightbox__nav lightbox__nav--prev"
-            type="button"
-            onClick={() => changeProject(-1)}
-            aria-label="Projeto anterior"
-          >
-            ←
-          </button>
-          <figure className="lightbox__figure" key={activeProject.title}>
-            <img src={activeProject.image} alt={activeProject.alt} />
-            <figcaption>
-              <span>
-                {String(activeIndex + 1).padStart(2, "0")} /{" "}
-                {String(projects.length).padStart(2, "0")}
-              </span>
-              <div>
-                <small>{activeProject.subtitle}</small>
-                <h2 id="lightbox-title">{activeProject.title}</h2>
-                <p>{activeProject.description}</p>
-              </div>
-            </figcaption>
-          </figure>
-          <button
-            className="lightbox__nav lightbox__nav--next"
-            type="button"
-            onClick={() => changeProject(1)}
-            aria-label="Próximo projeto"
-          >
-            →
-          </button>
-        </div>
+      {activeIndex !== null && items[activeIndex] && (
+        <Lightbox items={items} index={activeIndex} onChange={changeProject} onClose={closeLightbox} />
       )}
-    </main>
+    </div>
   );
 }
