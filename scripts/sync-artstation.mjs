@@ -60,12 +60,37 @@ function parseItem(block) {
   };
 }
 
+const transient = (status) => status === 403 || status === 408 || status === 425 || status === 429 || status >= 500;
+
+/**
+ * Busca o feed. O ArtStation às vezes recusa por um instante (HTTP 403 passageiro, visto em servidores do GitHub):
+ * até 3 tentativas, com pausa maior a cada uma, só para erros temporários. Na Vercel é 1 tentativa (não atrasa o build).
+ */
+async function fetchFeed() {
+  const attempts = process.env.VERCEL ? 1 : 3;
+  const pause = Number(process.env.ARTSTATION_RETRY_DELAY_MS ?? 30000);
+  let failure;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const response = await fetch(feedUrl, { headers: { "User-Agent": userAgent, Accept: "application/rss+xml" }, signal: AbortSignal.timeout(20000) });
+      if (response.ok) return await response.text();
+      failure = new Error(`HTTP ${response.status}`);
+      if (!transient(response.status)) break; // recusa definitiva (404 etc.): não insiste
+    } catch (error) {
+      failure = error;
+    }
+    if (attempt < attempts) {
+      console.warn(`[artstation] tentativa ${attempt} falhou (${failure.message}); nova tentativa em ${Math.round((pause * attempt) / 1000)} s.`);
+      await new Promise((resolve) => setTimeout(resolve, pause * attempt));
+    }
+  }
+  throw failure;
+}
+
 async function main() {
   let xml;
   try {
-    const response = await fetch(feedUrl, { headers: { "User-Agent": userAgent, Accept: "application/rss+xml" }, signal: AbortSignal.timeout(20000) });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    xml = await response.text();
+    xml = await fetchFeed();
   } catch (error) {
     console.warn(`[artstation] não foi possível atualizar (${error.message}); mantendo o arquivo anterior.`);
     return;
