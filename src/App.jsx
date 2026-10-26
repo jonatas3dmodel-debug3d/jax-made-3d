@@ -12,7 +12,7 @@ import {
   toolkit,
 } from "./data.js";
 import { mergeArtstation, profileUrl, sizeOf, syncedAt } from "./artstation.js";
-import { CountUp, prefersReducedMotion, useReveal, useScrollEffects, useScrollSpy } from "./hooks.jsx";
+import { CountUp, prefersReducedMotion, usePauseOffscreen, useReveal, useScrollEffects, useScrollSpy } from "./hooks.jsx";
 
 const contactEndpoint = `https://formsubmit.co/ajax/${email}`;
 
@@ -94,15 +94,17 @@ function Header({ active }) {
 function Hero() {
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
-      <img
-        className="hero__image"
-        src="/work/environment-night.webp"
-        alt="Ambiente 3D noturno criado por Jonatas Araújo"
-        width="1325"
-        height="894"
-        fetchPriority="high"
-        decoding="async"
-      />
+      <div className="hero__media">
+        <img
+          className="hero__image"
+          src="/work/environment-night.webp"
+          alt="Ambiente 3D noturno criado por Jonatas Araújo"
+          width="1325"
+          height="894"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </div>
       <div className="hero__veil" />
       <div className="hero__grid" aria-hidden="true" />
       <div className="hero__scan" aria-hidden="true" />
@@ -633,6 +635,7 @@ export default function Home() {
   const boxItems = box?.list === "recent" ? recent : items;
 
   useScrollEffects(rootRef);
+  usePauseOffscreen(rootRef, ".hero, .statement, .contact");
   useReveal(rootRef, [filter]);
 
   const openBox = useCallback((list, index) => setBox({ list, index }), []);

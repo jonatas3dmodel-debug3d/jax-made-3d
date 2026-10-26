@@ -31,36 +31,69 @@ export function useReveal(rootRef, deps = []) {
   }, deps);
 }
 
-/** Page-level motion: scroll progress, hero parallax, header state and the cursor glow. */
+/**
+ * Page-level motion: scroll progress, hero parallax, header state and the cursor glow.
+ *
+ * Performance rules (measured: writing CSS variables on the page root made the browser restyle the whole page on every
+ * scroll and mouse move, ~half of all main-thread time):
+ * - values go straight to the element that uses them (inline transform / variables scoped to the hero);
+ * - everything is coalesced to one update per frame;
+ * - the hero parallax stops when the hero is off screen; layout is measured once, not read on every scroll.
+ */
 export function useScrollEffects(rootRef) {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return undefined;
     const reduced = prefersReducedMotion();
     const topbar = root.querySelector(".topbar");
-    let frame = 0;
+    const progress = root.querySelector(".topbar__progress");
+    const hero = root.querySelector(".hero");
+    const aura = root.querySelector(".cursor-aura");
+
+    let scrollable = 0;
+    let heroVisible = true;
+    let scrollFrame = 0;
+    let pointerFrame = 0;
+    let pointer = null;
+
+    const measure = () => {
+      scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    };
+    measure();
+    const sizeObserver = "ResizeObserver" in window ? new ResizeObserver(measure) : null;
+    sizeObserver?.observe(document.body);
+
+    const heroObserver = hero && "IntersectionObserver" in window
+      ? new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting; })
+      : null;
+    if (hero) heroObserver?.observe(hero);
 
     const raf = requestAnimationFrame(() => root.classList.add("is-loaded"));
 
     const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const scrollTop = window.scrollY;
-        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        root.style.setProperty("--scroll-progress", (scrollable > 0 ? scrollTop / scrollable : 0).toFixed(4));
-        root.style.setProperty("--hero-scroll", `${Math.min(scrollTop * 0.12, 90)}px`);
-        topbar?.classList.toggle("is-scrolled", scrollTop > 32);
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = 0;
+        const y = window.scrollY;
+        if (progress) progress.style.transform = `scaleX(${scrollable > 0 ? Math.min(1, y / scrollable).toFixed(4) : 0})`;
+        if (heroVisible && hero) hero.style.setProperty("--hero-scroll", `${Math.min(y * 0.12, 90)}px`);
+        topbar?.classList.toggle("is-scrolled", y > 32);
       });
     };
 
     const onPointer = (event) => {
       if (reduced) return;
-      const x = event.clientX / window.innerWidth;
-      const y = event.clientY / window.innerHeight;
-      root.style.setProperty("--pointer-x", `${event.clientX}px`);
-      root.style.setProperty("--pointer-y", `${event.clientY}px`);
-      root.style.setProperty("--hero-x", `${(x - 0.5) * -18}px`);
-      root.style.setProperty("--hero-y", `${(y - 0.5) * -12}px`);
+      pointer = event;
+      if (pointerFrame) return;
+      pointerFrame = requestAnimationFrame(() => {
+        pointerFrame = 0;
+        const { clientX, clientY } = pointer;
+        if (aura) aura.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
+        if (heroVisible && hero) {
+          hero.style.setProperty("--hero-x", `${(clientX / window.innerWidth - 0.5) * -18}px`);
+          hero.style.setProperty("--hero-y", `${(clientY / window.innerHeight - 0.5) * -12}px`);
+        }
+      });
     };
 
     onScroll();
@@ -68,11 +101,27 @@ export function useScrollEffects(rootRef) {
     window.addEventListener("pointermove", onPointer, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(scrollFrame);
+      cancelAnimationFrame(pointerFrame);
+      sizeObserver?.disconnect();
+      heroObserver?.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointer);
     };
   }, [rootRef]);
+}
+
+/** Pauses the endless animations of a section while it is off screen (they kept repainting for nothing). */
+export function usePauseOffscreen(rootRef, selector) {
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !("IntersectionObserver" in window)) return undefined;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.toggleAttribute("data-paused", !entry.isIntersecting));
+    });
+    root.querySelectorAll(selector).forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, [rootRef, selector]);
 }
 
 /** Returns the id of the section currently crossing the middle of the viewport. */
