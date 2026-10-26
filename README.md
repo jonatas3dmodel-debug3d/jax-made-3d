@@ -25,6 +25,7 @@ O resultado é gerado em `dist/` e pode ser publicado diretamente na Vercel.
 | `src/data.js` | Estrutura que não depende de idioma: projetos (chaves, categorias, imagens), WhatsApp, números do topo |
 | `src/gallery.js` | Monta as galerias no idioma escolhido, juntando os projetos curados com o ArtStation |
 | `src/i18n.jsx` | Idioma (detecção, troca, memória, `<html lang>`, título) |
+| `src/visitors.js` | Contador de visitantes (serviço, regras do que conta e do que não conta) |
 | `src/App.jsx` · `src/hooks.jsx` · `src/styles.css` | Seções, animações de rolagem e visual (cores e fontes em `:root`) |
 | `src/work-manifest.json` | Tamanhos das imagens otimizadas de `public/work/` (gerado por `scripts/optimize-image.mjs`) |
 | `public/cv/` | Os currículos em PDF (os links do site apontam para estes dois arquivos) |
@@ -45,6 +46,15 @@ Nomes de projetos, empresas e ferramentas não são traduzidos (`translate="no"`
    Isso gera `public/work/meu-projeto/01-capa-{640,1280,1920}.webp` e atualiza o manifesto. Use `--crop esquerda,topo,largura,altura` para recortar (por exemplo, para tirar a interface de um editor).
 2. Em `src/data.js`, inclua o projeto em `projects` (`key`, `title`, `categories`, `images`).
 3. Em `src/copy.js`, inclua os textos em `pt.projects.<key>` e `en.projects.<key>` (`subtitle`, `description`, `tags` e um `alt` por imagem).
+
+## Contador de visitantes
+
+O número no topo da página ("N visitantes no portfólio") é um contador anônimo: cada navegador é contado **uma vez** (a marca fica no `localStorage`) e o único dado enviado é o pedido de "+1" ao serviço público [Abacus](https://jasoncameron.dev/abacus), que guarda só o número. Se o serviço não responder, o contador some e o resto do site não é afetado.
+
+- **Não contam:** `localhost`, navegadores automatizados (`navigator.webdriver`), user agents de robôs, e quem não consegue guardar a marca (assim uma pessoa não é contada a cada abertura).
+- **Dono do site:** abra uma vez `https://jax-made-3d.vercel.app/?contador=off` no seu navegador para parar de contar as suas visitas (`?contador=on` desfaz).
+- **Limites:** o número é indicativo, não uma auditoria: quem limpa os dados do navegador ou usa outro aparelho conta de novo, e qualquer pessoa que conheça o endereço do contador pode somar. O Abacus é gratuito e sem garantia: ele diz renovar o prazo de 6 meses a cada acesso, mas num teste de 12 minutos o prazo não renovou, então não conte com isso. Se o número voltar a zero um dia, é por esse motivo (ou o serviço saiu do ar); a saída durável é um contador próprio (função da Vercel + Upstash Redis, ligados pelo painel).
+- **Trocar de serviço:** só `src/visitors.js` conhece o Abacus; basta mudar `service`/`counter` (ou reescrever `call`). As estatísticas completas (páginas, países, dispositivos) ficam no Vercel Web Analytics, que se liga no painel do projeto.
 
 ## ArtStation
 

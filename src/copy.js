@@ -36,6 +36,10 @@ const pt = {
     stats: ["projetos em destaque", "projetos freelance", "de formação em Game Design", "plataformas: Unreal, Unity e Roblox"],
     years: " anos",
   },
+  visitors: {
+    label: (total) => (total === 1 ? "visitante no portfólio" : "visitantes no portfólio"),
+    note: "Contagem anônima: cada navegador é contado uma única vez.",
+  },
   work: {
     title: "Trabalhos selecionados",
     text: "Uma galeria curada entre trabalhos profissionais, ambientes em tempo real, level design e escultura digital. Clique em uma imagem para ampliar.",
@@ -129,7 +133,7 @@ const pt = {
   contact: {
     pre: "Tem uma ideia, um mundo ou uma cena para construir?",
     h2: "Vamos criar algo que mereça ser explorado.",
-    portrait: "Retrato profissional de Jonatas Araújo",
+    portrait: "Retrato de Jonatas Araújo",
     quickLabel: "Contato direto",
     whatsapp: "Chamar no WhatsApp",
     whatsappText: "Olá, Jonatas! Vi o seu portfólio e gostaria de conversar sobre um projeto.",
@@ -262,6 +266,10 @@ const en = {
     stats: ["featured projects", "freelance projects", "of Game Design training", "platforms: Unreal, Unity and Roblox"],
     years: " years",
   },
+  visitors: {
+    label: (total) => (total === 1 ? "portfolio visitor" : "portfolio visitors"),
+    note: "Anonymous count: each browser is counted only once.",
+  },
   work: {
     title: "Selected work",
     text: "A curated gallery of professional work, real-time environments, level design and digital sculpting. Click an image to enlarge.",
@@ -355,7 +363,7 @@ const en = {
   contact: {
     pre: "Got an idea, a world or a scene to build?",
     h2: "Let's create something worth exploring.",
-    portrait: "Professional portrait of Jonatas Araújo",
+    portrait: "Portrait of Jonatas Araújo",
     quickLabel: "Direct contact",
     whatsapp: "Chat on WhatsApp",
     whatsappText: "Hi Jonatas! I saw your portfolio and would like to talk about a project.",

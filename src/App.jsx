@@ -5,6 +5,7 @@ import { artstation, email, filterKeys, stats, whatsapp } from "./data.js";
 import { buildGallery } from "./gallery.js";
 import { CountUp, prefersReducedMotion, usePauseOffscreen, useReveal, useScrollEffects, useScrollSpy } from "./hooks.jsx";
 import { LangProvider, useLang } from "./i18n.jsx";
+import { loadVisitors } from "./visitors.js";
 
 const contactEndpoint = `https://formsubmit.co/ajax/${email}`;
 const sectionIds = ["trabalhos", "sobre", "experiencia", "contato"];
@@ -104,6 +105,40 @@ function Header({ active }) {
   );
 }
 
+function EyeIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+      <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="3" fill="currentColor" />
+    </svg>
+  );
+}
+
+/** Total de visitantes do portfólio (src/visitors.js). Se o serviço não responder, nada é exibido. */
+function Visitors() {
+  const { t } = useLang();
+  const [total, setTotal] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    loadVisitors().then((value) => alive && setTotal(value));
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  if (total === null) return null;
+  return (
+    <div className="visitors" title={t.visitors.note}>
+      <EyeIcon />
+      <strong translate="no">
+        <CountUp value={total} />
+      </strong>
+      <span>{t.visitors.label(total)}</span>
+    </div>
+  );
+}
+
 /* -------------------------------------------------------------------------------------------- */
 function Hero() {
   const { t } = useLang();
@@ -137,6 +172,7 @@ function Hero() {
           <a className="button button--glass" href="#contato">
             {t.hero.contact} <span aria-hidden="true">↓</span>
           </a>
+          <Visitors />
         </div>
       </div>
 
@@ -567,7 +603,7 @@ function Contact() {
   return (
     <section className="contact section" id="contato" aria-labelledby="contact-title">
       <div className="contact__visual reveal">
-        <img src="/profile/jonatas-araujo.webp" alt={c.portrait} width="900" height="1200" loading="lazy" />
+        <img src="/profile/jonatas-araujo.webp" alt={c.portrait} width="600" height="800" loading="lazy" />
         <span aria-hidden="true">EST. 2025</span>
       </div>
       <div className="contact__copy reveal" style={{ "--reveal-delay": "120ms" }}>
