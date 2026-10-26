@@ -90,7 +90,8 @@ async function fetchFeed() {
 async function main() {
   let xml;
   try {
-    xml = await fetchFeed();
+    // ARTSTATION_FEED_FILE: usa um feed já baixado (o fluxo do GitHub baixa com curl, que o ArtStation aceita melhor que o fetch do Node)
+    xml = process.env.ARTSTATION_FEED_FILE ? await readFile(process.env.ARTSTATION_FEED_FILE, "utf8") : await fetchFeed();
   } catch (error) {
     console.warn(`[artstation] não foi possível atualizar (${error.message}); mantendo o arquivo anterior.`);
     return;

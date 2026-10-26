@@ -23,8 +23,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Buscar o feed do ArtStation
-        run: node scripts/sync-artstation.mjs
+      - name: Baixar o feed do ArtStation
+        # Mesmo User-Agent honesto do script. O servidor do ArtStation às vezes recusa por um instante: 4 tentativas, 30 s entre elas.
+        # Se não conseguir, o fluxo não falha (nada é atualizado hoje; tenta de novo amanhã).
+        run: |
+          curl -fsS --retry 3 --retry-delay 30 --retry-all-errors --max-time 30 \
+            -A "jax-made-3d-portfolio-sync/1.0 (+https://jax-made-3d.vercel.app; sincronização do próprio perfil)" \
+            -H "Accept: application/rss+xml" \
+            -o feed.xml https://www.artstation.com/jonatas_araujo.rss \
+            || echo "::warning::ArtStation recusou o download hoje; nada foi atualizado."
+      - name: Atualizar o arquivo salvo
+        if: hashFiles('feed.xml') != ''
+        run: ARTSTATION_FEED_FILE=feed.xml node scripts/sync-artstation.mjs
       - name: Gravar se houve mudança
         run: |
           if git diff --quiet -- src/artstation.generated.json; then
