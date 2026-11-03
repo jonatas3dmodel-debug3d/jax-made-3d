@@ -204,7 +204,7 @@ const pt = {
     god: {
       subtitle: "Jogo · Game jam · HTML5",
       description:
-        "Jogo de estratégia narrativo em 1-bit sobre fé, sacrifício e memória: um deus esquecido desperta para reconstruir uma civilização perdida em sete dias. Reúna recursos, guie seu povo e encare as consequências de cada escolha divina. Tudo tem um preço, e ser lembrado pode custar mais do que você espera. Jogável no navegador, publicado no itch.io. A página do jogo declara uso de IA como apoio no código e nos gráficos.",
+        "Jogo de estratégia narrativo em 1-bit sobre fé, sacrifício e memória: um deus esquecido desperta para reconstruir uma civilização perdida em sete dias. Reúna recursos, guie seu povo e encare as consequências de cada escolha divina. Tudo tem um preço, e ser lembrado pode custar mais do que você espera. Jogável no navegador, publicado no itch.io. Fui responsável pelo game design e criei a base principal da história.",
       tags: ["1-bit", "Pixel art", "Estratégia", "Narrativo", "Game jam", "HTML5"],
       alts: [
         "Vila em visão isométrica de dia, com uma pirâmide ao centro, o deus no topo e o painel de recursos à esquerda",
@@ -451,7 +451,7 @@ const en = {
     god: {
       subtitle: "Game · Game jam · HTML5",
       description:
-        "A 1-bit narrative strategy game about faith, sacrifice and remembrance: a forgotten god awakens to rebuild a lost civilization over seven days. Gather resources, guide your people and face the consequences of every divine choice. Everything has a price, and being remembered may cost more than you expect. Playable in the browser, published on itch.io. The game page discloses AI assistance with code and graphics.",
+        "A 1-bit narrative strategy game about faith, sacrifice and remembrance: a forgotten god awakens to rebuild a lost civilization over seven days. Gather resources, guide your people and face the consequences of every divine choice. Everything has a price, and being remembered may cost more than you expect. Playable in the browser, published on itch.io. I was responsible for the game design and created the core of the story.",
       tags: ["1-bit", "Pixel art", "Strategy", "Narrative", "Game jam", "HTML5"],
       alts: [
         "Isometric daytime village with a pyramid in the center, the god on top and the resource panel on the left",
