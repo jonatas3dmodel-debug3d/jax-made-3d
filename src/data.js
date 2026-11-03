@@ -38,7 +38,18 @@ export const projects = [
     title: "Block 406",
     categories: ["ambientes", "jogos"],
     externalUrl: "https://hunterzinho.itch.io/bloco-406", // versão alfa (protótipo de game jam) no itch.io
-    images: ["block406/01-apartment-lobby", "block406/02-blocking-bedroom-2", "block406/03-blocking-bedroom"],
+    // as seis primeiras são capturas do jogo; as três últimas são o blockout inicial (o "antes")
+    images: [
+      "block406/game/01-lobby",
+      "block406/game/02-kitchen",
+      "block406/game/03-living-room",
+      "block406/game/04-bedroom",
+      "block406/game/05-blood-corridor",
+      "block406/game/06-kitchen-storage",
+      "block406/01-apartment-lobby",
+      "block406/02-blocking-bedroom-2",
+      "block406/03-blocking-bedroom",
+    ],
   },
   {
     key: "god",

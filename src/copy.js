@@ -193,12 +193,18 @@ const pt = {
     block406: {
       subtitle: "Game jam · Level design · Versão alfa",
       description:
-        "Protótipo (versão alfa) de terror psicológico em estilo retrô, inspirado em Silent Hill e Resident Evil, criado em equipe para uma game jam: um prédio em quarentena, corredores vazios e o isolamento como atmosfera. Atuei como game designer, level designer e environment artist, trabalhando progressão, fluxo do jogador, objetivos e atmosfera em Unreal Engine. Com Kauê Augusto (arte 3D), Erick Monteiro e Lucas Onishi (programação). Versão para Windows, disponível para baixar no itch.io.",
+        "Protótipo (versão alfa) de terror psicológico em estilo retrô, inspirado em Silent Hill e Resident Evil, criado em equipe para uma game jam: um prédio em quarentena, corredores vazios e o isolamento como atmosfera. Atuei como game designer, level designer e environment artist, trabalhando progressão, fluxo do jogador, objetivos e atmosfera em Unreal Engine. Com Kauê Augusto (arte 3D), Erick Monteiro e Lucas Onishi (programação). As seis primeiras imagens são capturas do jogo; as três últimas mostram o blockout inicial, antes da arte final. Versão para Windows, disponível para baixar no itch.io.",
       tags: ["Unreal Engine", "Level design", "Game design", "Terror", "Game jam"],
       alts: [
-        "Lobby de apartamento em blockout na Unreal Engine, com mobiliário em roxo e personagens de teste",
-        "Planta em blockout de um apartamento, vista de cima: quartos e banheiros",
-        "Blockout de um conjunto de cômodos com mobiliário básico, vista de cima",
+        "Captura do jogo: salão do prédio, com tijolos aparentes, mesa de trabalho, sofás e uma mulher de pé à direita, em luz baixa e visual retrô",
+        "Captura do jogo: cozinha envelhecida com armários verdes, fogão, geladeira e mesa de madeira",
+        "Captura do jogo: sala com sofá, mesa de centro, paredes rachadas e manchas escuras no chão",
+        "Captura do jogo: quarto escuro com guarda-roupa de madeira, cama, bandeira dos Estados Unidos na parede e um feixe de luz no teto",
+        "Captura do jogo: corredor com paredes e chão manchados de vermelho-escuro",
+        "Captura do jogo: cozinha em desordem, com caixas espalhadas, geladeira azul e manchas no chão",
+        "Blockout: lobby de apartamento na Unreal Engine, com mobiliário em roxo e personagens de teste",
+        "Blockout: planta de um apartamento, vista de cima, com quartos e banheiros",
+        "Blockout: conjunto de cômodos com mobiliário básico, vista de cima",
       ],
     },
     god: {
@@ -440,12 +446,18 @@ const en = {
     block406: {
       subtitle: "Game jam · Level design · Alpha version",
       description:
-        "Retro-style psychological horror prototype (alpha version) inspired by Silent Hill and Resident Evil, made by a team for a game jam: a building under quarantine, empty hallways and isolation as atmosphere. I worked as game designer, level designer and environment artist, on progression, player flow, objectives and atmosphere in Unreal Engine. With Kauê Augusto (3D art), Erick Monteiro and Lucas Onishi (programming). Windows build, available to download on itch.io.",
+        "Retro-style psychological horror prototype (alpha version) inspired by Silent Hill and Resident Evil, made by a team for a game jam: a building under quarantine, empty hallways and isolation as atmosphere. I worked as game designer, level designer and environment artist, on progression, player flow, objectives and atmosphere in Unreal Engine. With Kauê Augusto (3D art), Erick Monteiro and Lucas Onishi (programming). The first six images are in-game captures; the last three show the initial blockout, before the final art. Windows build, available to download on itch.io.",
       tags: ["Unreal Engine", "Level design", "Game design", "Horror", "Game jam"],
       alts: [
-        "Apartment lobby blockout in Unreal Engine, with purple furniture and test characters",
-        "Top-down blockout plan of an apartment: bedrooms and bathrooms",
-        "Top-down blockout of a set of rooms with basic furniture",
+        "In-game capture: the building's hall, with exposed brick, a work desk, sofas and a woman standing on the right, in low light and a retro look",
+        "In-game capture: an aged kitchen with green cabinets, a stove, a fridge and a wooden table",
+        "In-game capture: a living room with a sofa, coffee table, cracked walls and dark stains on the floor",
+        "In-game capture: a dark bedroom with a wooden wardrobe, a bed, a United States flag on the wall and a beam of light on the ceiling",
+        "In-game capture: a corridor with walls and floor stained dark red",
+        "In-game capture: a messy kitchen with scattered boxes, a blue fridge and stains on the floor",
+        "Blockout: apartment lobby in Unreal Engine, with purple furniture and test characters",
+        "Blockout: top-down plan of an apartment, with bedrooms and bathrooms",
+        "Blockout: top-down view of a set of rooms with basic furniture",
       ],
     },
     god: {
