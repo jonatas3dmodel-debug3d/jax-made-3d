@@ -251,6 +251,11 @@ function LightboxFigure({ project }) {
               <p>{project.notes}</p>
             </div>
           )}
+          {project.externalUrl && (
+            <a className="text-link" href={project.externalUrl} target="_blank" rel="noreferrer">
+              {t.lightbox.play} <Arrow />
+            </a>
+          )}
           {project.artstationUrl && (
             <a className="text-link" href={project.artstationUrl} target="_blank" rel="noreferrer">
               {t.lightbox.artstation} <Arrow />

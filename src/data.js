@@ -6,7 +6,7 @@ export const artstation = "https://www.artstation.com/jonatas_araujo";
 export const email = "jonatas3dmodel@gmail.com";
 export const whatsapp = { number: "5511984516003", display: "+55 11 98451-6003" };
 
-export const filterKeys = ["all", "ambientes", "criaturas"];
+export const filterKeys = ["all", "ambientes", "criaturas", "jogos"];
 
 // `images` são chaves do manifesto (public/work/<chave>-<largura>.webp); a primeira é a capa.
 // `artstationId` liga o projeto ao do ArtStation (os títulos nem sempre coincidem): a galeria passa a mostrar o projeto completo.
@@ -36,8 +36,24 @@ export const projects = [
   {
     key: "block406",
     title: "Block 406",
-    categories: ["ambientes"],
+    categories: ["ambientes", "jogos"],
+    externalUrl: "https://hunterzinho.itch.io/bloco-406", // versão alfa (protótipo de game jam) no itch.io
     images: ["block406/01-apartment-lobby", "block406/02-blocking-bedroom-2", "block406/03-blocking-bedroom"],
+  },
+  {
+    key: "god",
+    title: "The God of Small Things",
+    categories: ["jogos"],
+    externalUrl: "https://hunterzinho.itch.io/the-god-of-small-things", // página do jogo no itch.io (botão "Jogar" na janela do projeto)
+    images: [
+      "god/02-settlement-day",
+      "god/01-cover",
+      "god/03-build-menu",
+      "god/04-miracles",
+      "god/05-the-pact",
+      "god/06-every-choice",
+      "god/07-settlement-night",
+    ],
   },
   { key: "varkos", title: "Varkos — Tyrannosaurus Rex", artstationId: "P4el1L", categories: ["criaturas"], images: ["covers/varkos-trex"] },
   { key: "virex", title: "Virex, the Hollow Seer", artstationId: "qJx8bz", categories: ["criaturas"], images: ["covers/virex"] },

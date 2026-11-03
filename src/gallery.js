@@ -45,6 +45,7 @@ export function buildGallery(lang) {
       title: project.title,
       categories: project.categories,
       layout: project.layout,
+      externalUrl: project.externalUrl,
       subtitle: text.subtitle,
       description: text.description,
       tags: text.tags,

@@ -44,7 +44,7 @@ const pt = {
     title: "Trabalhos selecionados",
     text: "Uma galeria curada entre trabalhos profissionais, ambientes em tempo real, level design e escultura digital. Clique em uma imagem para ampliar.",
     filterLabel: "Filtrar trabalhos",
-    filters: { all: "Todos", ambientes: "Ambientes", criaturas: "Criaturas" },
+    filters: { all: "Todos", ambientes: "Ambientes", criaturas: "Criaturas", jogos: "Jogos" },
     shown: (n) => `${n} ${n === 1 ? "trabalho exibido" : "trabalhos exibidos"}`,
     open: (title) => `${title}, ampliar imagem na galeria`,
     images: (n) => `${n} imagens`,
@@ -66,6 +66,7 @@ const pt = {
     thumbs: "Imagens do projeto",
     thumb: (i, n) => `Ver imagem ${i} de ${n}`,
     tags: "Ferramentas e disciplinas",
+    play: "Ver o jogo no itch.io",
     artstation: "Ver projeto completo no ArtStation",
     notes: "Notas e créditos (ArtStation)",
   },
@@ -190,13 +191,29 @@ const pt = {
       ],
     },
     block406: {
-      subtitle: "Game jam · Level design",
-      description: "Level design criado para game jam, trabalhando progressão, fluxo do jogador, objetivos e construção de atmosfera em Unreal Engine.",
-      tags: ["Unreal Engine", "Level design", "Game jam"],
+      subtitle: "Game jam · Level design · Versão alfa",
+      description:
+        "Protótipo (versão alfa) de terror psicológico em estilo retrô, inspirado em Silent Hill e Resident Evil, criado em equipe para uma game jam: um prédio em quarentena, corredores vazios e o isolamento como atmosfera. Atuei como game designer, level designer e environment artist, trabalhando progressão, fluxo do jogador, objetivos e atmosfera em Unreal Engine. Com Kauê Augusto (arte 3D), Erick Monteiro e Lucas Onishi (programação). Versão para Windows, disponível para baixar no itch.io.",
+      tags: ["Unreal Engine", "Level design", "Game design", "Terror", "Game jam"],
       alts: [
         "Lobby de apartamento em blockout na Unreal Engine, com mobiliário em roxo e personagens de teste",
         "Planta em blockout de um apartamento, vista de cima: quartos e banheiros",
         "Blockout de um conjunto de cômodos com mobiliário básico, vista de cima",
+      ],
+    },
+    god: {
+      subtitle: "Jogo · Game jam · HTML5",
+      description:
+        "Jogo de estratégia narrativo em 1-bit sobre fé, sacrifício e memória: um deus esquecido desperta para reconstruir uma civilização perdida em sete dias. Reúna recursos, guie seu povo e encare as consequências de cada escolha divina. Tudo tem um preço, e ser lembrado pode custar mais do que você espera. Jogável no navegador, publicado no itch.io. A página do jogo declara uso de IA como apoio no código e nos gráficos.",
+      tags: ["1-bit", "Pixel art", "Estratégia", "Narrativo", "Game jam", "HTML5"],
+      alts: [
+        "Vila em visão isométrica de dia, com uma pirâmide ao centro, o deus no topo e o painel de recursos à esquerda",
+        "Arte de capa de The God of Small Things: um deus esquelético com manto e cocar diante de uma pirâmide, sob a lua, em preto e branco",
+        "Menu de construção com abrigo, celeiro, campo, altar e templo, sobre a vila",
+        "Menu de milagres com rio e chuva, cada um com seu custo em sangue",
+        "Tela O Pacto, com as regras do jogo: o povo mantém você vivo, todo pedido tem um preço, seu poder é sua presença, sobreviva sete noites",
+        "Escolha de um pedido no altar: apagar a memória de Kaan, inventar um inimigo ou dar a dor do povo a Kaan, cada opção com seu custo",
+        "A mesma vila à noite, com a lua no painel de tempo e os habitantes em silhueta",
       ],
     },
     varkos: {
@@ -274,7 +291,7 @@ const en = {
     title: "Selected work",
     text: "A curated gallery of professional work, real-time environments, level design and digital sculpting. Click an image to enlarge.",
     filterLabel: "Filter work",
-    filters: { all: "All", ambientes: "Environments", criaturas: "Creatures" },
+    filters: { all: "All", ambientes: "Environments", criaturas: "Creatures", jogos: "Games" },
     shown: (n) => `${n} ${n === 1 ? "project shown" : "projects shown"}`,
     open: (title) => `${title}, open in the gallery`,
     images: (n) => `${n} images`,
@@ -296,6 +313,7 @@ const en = {
     thumbs: "Project images",
     thumb: (i, n) => `View image ${i} of ${n}`,
     tags: "Tools and disciplines",
+    play: "View the game on itch.io",
     artstation: "View full project on ArtStation",
     notes: "Notes and credits (ArtStation)",
   },
@@ -420,13 +438,29 @@ const en = {
       ],
     },
     block406: {
-      subtitle: "Game jam · Level design",
-      description: "Level design created for a game jam, working on progression, player flow, objectives and atmosphere in Unreal Engine.",
-      tags: ["Unreal Engine", "Level design", "Game jam"],
+      subtitle: "Game jam · Level design · Alpha version",
+      description:
+        "Retro-style psychological horror prototype (alpha version) inspired by Silent Hill and Resident Evil, made by a team for a game jam: a building under quarantine, empty hallways and isolation as atmosphere. I worked as game designer, level designer and environment artist, on progression, player flow, objectives and atmosphere in Unreal Engine. With Kauê Augusto (3D art), Erick Monteiro and Lucas Onishi (programming). Windows build, available to download on itch.io.",
+      tags: ["Unreal Engine", "Level design", "Game design", "Horror", "Game jam"],
       alts: [
         "Apartment lobby blockout in Unreal Engine, with purple furniture and test characters",
         "Top-down blockout plan of an apartment: bedrooms and bathrooms",
         "Top-down blockout of a set of rooms with basic furniture",
+      ],
+    },
+    god: {
+      subtitle: "Game · Game jam · HTML5",
+      description:
+        "A 1-bit narrative strategy game about faith, sacrifice and remembrance: a forgotten god awakens to rebuild a lost civilization over seven days. Gather resources, guide your people and face the consequences of every divine choice. Everything has a price, and being remembered may cost more than you expect. Playable in the browser, published on itch.io. The game page discloses AI assistance with code and graphics.",
+      tags: ["1-bit", "Pixel art", "Strategy", "Narrative", "Game jam", "HTML5"],
+      alts: [
+        "Isometric daytime village with a pyramid in the center, the god on top and the resource panel on the left",
+        "Cover art of The God of Small Things: a skeletal god in a cloak and headdress in front of a pyramid, under the moon, in black and white",
+        "Build menu with shelter, granary, field, altar and temple, over the village",
+        "Miracles menu with river and rain, each with its blood cost",
+        "The Pact screen, listing the rules: your people keep you alive, every request has a price, your power is your presence, survive seven nights",
+        "Choosing a request at the altar: erase Kaan's memory, invent an enemy, or give the people's pain to Kaan, each option with its cost",
+        "The same village at night, with the moon on the time bar and the villagers in silhouette",
       ],
     },
     varkos: {
