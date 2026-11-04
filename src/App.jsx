@@ -253,7 +253,7 @@ function LightboxFigure({ project }) {
           )}
           {project.externalUrl && (
             <a className="text-link" href={project.externalUrl} target="_blank" rel="noreferrer">
-              {t.lightbox.play} <Arrow />
+              {t.lightbox.play[project.store] ?? t.lightbox.play.itch} <Arrow />
             </a>
           )}
           {project.artstationUrl && (

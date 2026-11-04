@@ -66,7 +66,7 @@ const pt = {
     thumbs: "Imagens do projeto",
     thumb: (i, n) => `Ver imagem ${i} de ${n}`,
     tags: "Ferramentas e disciplinas",
-    play: "Ver o jogo no itch.io",
+    play: { itch: "Ver o jogo no itch.io", play: "Baixar na Google Play" },
     artstation: "Ver projeto completo no ArtStation",
     notes: "Notas e créditos (ArtStation)",
   },
@@ -188,6 +188,19 @@ const pt = {
         "Posto policial renderizado, com paisagismo e personagem",
         "Praça com cobertas em forma de árvore e ipês floridos",
         "Modelo 3D da torre de tirolesa no Blender",
+      ],
+    },
+    cristal: {
+      subtitle: "Jogo mobile · Roguelite · Android",
+      description:
+        "Roguelite de sobrevivência em pixel art, publicado na Google Play: o Cristal se partiu e seus fragmentos despertaram os mortos. Escolha um herói e sobreviva às hordas por 10 minutos, subindo de nível e montando uma build diferente a cada partida com cartas de habilidade. São 8 heróis, 5 regiões com um chefe cada e camadas de desafio cada vez mais difíceis. Desenvolvido em equipe, pela Bighouse. Fui responsável pelo game design: a ideia dos personagens, das fases e dos chefes, e as habilidades dos heróis. Gratuito para jogar, com compras opcionais.",
+      tags: ["Game design", "Roguelite", "Pixel art", "Mobile", "Android"],
+      alts: [
+        "Arte de capa de A Lenda do Cristal: o título em pixel art sobre um céu estrelado, com a lua, um cristal azul e um castelo em silhueta",
+        "Jogo em ação: um herói cercado por uma horda de zumbis e morcegos, com uma explosão ao centro e números de dano na tela",
+        "Tela de subida de nível: três cartas de habilidade para escolher (Escudo Radiante, Lâmina e Pressa), com opções de trocar e banir",
+        "Jogo em ação: a heroína de cabelo verde dispara orbes roxos contra morcegos, em uma clareira com árvores e lápides",
+        "Jogo em ação: morcegos roxos avançam sobre o herói em uma floresta, com cristais de experiência espalhados pelo chão",
       ],
     },
     block406: {
@@ -319,7 +332,7 @@ const en = {
     thumbs: "Project images",
     thumb: (i, n) => `View image ${i} of ${n}`,
     tags: "Tools and disciplines",
-    play: "View the game on itch.io",
+    play: { itch: "View the game on itch.io", play: "Get it on Google Play" },
     artstation: "View full project on ArtStation",
     notes: "Notes and credits (ArtStation)",
   },
@@ -441,6 +454,19 @@ const en = {
         "Rendered police station with landscaping and a character",
         "Plaza with tree-shaped canopies and blooming trumpet trees",
         "3D model of the zipline tower in Blender",
+      ],
+    },
+    cristal: {
+      subtitle: "Mobile game · Roguelite · Android",
+      description:
+        "A pixel-art survival roguelite published on Google Play: the Crystal shattered and its fragments woke the dead. Pick a hero and survive the hordes for 10 minutes, leveling up and building a different run every match with ability cards. There are 8 heroes, 5 regions with a boss each and ever-harder challenge layers. Developed by a team at Bighouse. I was responsible for the game design: the idea behind the characters, levels and bosses, and the heroes' abilities. Free to play, with optional purchases.",
+      tags: ["Game design", "Roguelite", "Pixel art", "Mobile", "Android"],
+      alts: [
+        "Cover art of A Lenda do Cristal (The Legend of the Crystal): the title in pixel art over a starry sky, with the moon, a blue crystal and a castle in silhouette",
+        "Gameplay: a hero surrounded by a horde of zombies and bats, with an explosion in the middle and damage numbers on screen",
+        "Level-up screen: three ability cards to choose from (Radiant Shield, Blade and Press), with reroll and banish options",
+        "Gameplay: the green-haired heroine fires purple orbs at bats in a clearing with trees and gravestones",
+        "Gameplay: purple bats close in on the hero in a forest, with experience crystals scattered on the ground",
       ],
     },
     block406: {

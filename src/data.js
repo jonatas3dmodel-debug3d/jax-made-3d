@@ -34,10 +34,19 @@ export const projects = [
     images: ["resort/01-full-resort", "resort/02-zipline", "resort/03-hotel", "resort/04-police-station", "resort/05-plaza", "resort/06-zipline-model"],
   },
   {
+    key: "cristal",
+    title: "A Lenda do Cristal",
+    categories: ["jogos"],
+    externalUrl: "https://play.google.com/store/apps/details?id=com.bighouse.alendadocristal", // página do jogo na Google Play
+    store: "play",
+    images: ["cristal/01-cover", "cristal/02-horde", "cristal/03-level-up", "cristal/04-bats", "cristal/05-forest"],
+  },
+  {
     key: "block406",
     title: "Block 406",
     categories: ["ambientes", "jogos"],
     externalUrl: "https://hunterzinho.itch.io/bloco-406", // versão alfa (protótipo de game jam) no itch.io
+    store: "itch",
     // as seis primeiras são capturas do jogo; as três últimas são o blockout inicial (o "antes")
     images: [
       "block406/game/01-lobby",
@@ -55,7 +64,8 @@ export const projects = [
     key: "god",
     title: "The God of Small Things",
     categories: ["jogos"],
-    externalUrl: "https://hunterzinho.itch.io/the-god-of-small-things", // página do jogo no itch.io (botão "Jogar" na janela do projeto)
+    externalUrl: "https://hunterzinho.itch.io/the-god-of-small-things", // página do jogo no itch.io
+    store: "itch",
     images: [
       "god/02-settlement-day",
       "god/01-cover",
