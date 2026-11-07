@@ -531,3 +531,47 @@ footer a:hover { color: var(--cyan); }
   .project img, .button, .text-link, .disciplines article, .cards article, .recent-card, .recent-card img, .lightbox__thumbs button, .topbar__nav > a, .topbar__nav, .topbar__burger span { transition: none; }
   .cursor-aura { display: none; }
 }
+
+/* work groups + featured release + video */
+.filters a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border: 1px solid rgba(255,255,255,.2); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: #c9d3d7; transition: background .25s ease, color .25s ease, border-color .25s ease; }
+.filters a small { font-size: 9px; color: var(--cyan-soft); }
+.filters a:hover { border-color: var(--cyan); color: var(--paper); }
+.work-group { scroll-margin-top: 90px; margin-top: 64px; }
+.work-group:first-of-type { margin-top: 36px; }
+.work-group__head { display: grid; grid-template-columns: auto 1fr; gap: 10px 36px; align-items: end; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.work-group__head h3 { margin: 0; font-size: clamp(26px, 3vw, 40px); font-weight: 600; letter-spacing: -.04em; line-height: 1; }
+.work-group__head p { max-width: 560px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.project__badge { position: absolute; z-index: 2; top: 24px; left: 82px; padding: 7px 11px; background: var(--cyan); color: #001014; font-family: var(--font-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+
+.featured { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(28px, 4vw, 64px); align-items: center; padding: clamp(56px, 8vw, 110px) var(--gutter); background: linear-gradient(180deg, #0a1013, #0c1216 60%, var(--ink)); border-bottom: 1px solid var(--line); }
+.featured__media { position: relative; margin: 0; aspect-ratio: 16 / 9; overflow: hidden; background: #05080a; border: 1px solid rgba(255,255,255,.1); box-shadow: 0 30px 90px rgba(0,0,0,.45); }
+.featured__media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.featured__tag { position: absolute; left: 18px; top: 18px; padding: 8px 12px; background: rgba(5,10,13,.8); border: 1px solid rgba(255,255,255,.22); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--cyan-soft); backdrop-filter: blur(8px); }
+.featured__copy h2 { margin: 0 0 18px; font-size: clamp(40px, 5.2vw, 78px); line-height: .94; letter-spacing: -.05em; font-weight: 600; text-transform: uppercase; }
+.featured__copy > p { max-width: 520px; margin: 0; color: #b2bec4; font-size: 16px; line-height: 1.7; }
+.featured__role { margin-top: 26px; }
+.featured__role > span { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .14em; color: var(--cyan-soft); }
+.featured__role .chips { margin-top: 10px; }
+.featured__role .chips li { border-color: rgba(3,216,255,.45); color: var(--paper); }
+.featured__copy > .featured__team { margin-top: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+.featured__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+.lightbox__stage--video { display: grid; place-items: center; cursor: default; }
+.lightbox__stage--video video { width: 100%; max-height: 54svh; background: #05080a; box-shadow: 0 30px 100px rgba(0,0,0,.5); }
+.lightbox__thumbs button.is-video { position: relative; }
+.lightbox__thumbs button.is-video::after { content: "▶"; position: absolute; inset: 0; display: grid; place-items: center; background: rgba(2,5,7,.38); color: #fff; font-size: 16px; }
+.lightbox__role { margin-top: 12px !important; color: var(--paper) !important; }
+.lightbox__role span { margin-right: 8px; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--cyan-soft); }
+
+@media (max-width: 900px) {
+  .featured { grid-template-columns: 1fr; }
+  .work-group__head { grid-template-columns: 1fr; }
+  .lightbox__stage--video video { max-height: 44svh; }
+}
+@media (max-width: 560px) {
+  .project__badge { left: 24px; top: 80px; }
+}
+button.button--outline { background: transparent; color: var(--paper); }
+.featured__tag { top: auto; bottom: 16px; }
+.lightbox__stage--video { min-height: 0; overflow: hidden; }
+.lightbox__stage--video video { width: 100%; height: 100%; max-height: 54svh; object-fit: contain; }

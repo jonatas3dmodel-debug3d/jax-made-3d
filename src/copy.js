@@ -4,8 +4,8 @@
 const pt = {
   htmlLang: "pt-BR",
   meta: {
-    title: "JAX MADE 3D | Jonatas Araújo",
-    description: "Portfólio de Jonatas Araújo: artista 3D e level designer. Ambientes, modelagem 3D, level design e cinematics em Unreal Engine e Unity.",
+    title: "JAX MADE 3D | Jonatas Araújo, Game Designer e Artista 3D",
+    description: "Portfólio de Jonatas Araújo: game designer, level designer e artista 3D. Jogos publicados, ambientes e criaturas 3D em Unreal Engine e Unity.",
   },
   skip: "Ir para o conteúdo",
   nav: {
@@ -22,10 +22,10 @@ const pt = {
   },
   lang: { label: "Idioma", pt: "Português", en: "English" },
   hero: {
-    eyebrow: "Jonatas Araújo · Artista 3D · São Paulo",
+    eyebrow: "Jonatas Araújo · Game Designer & Artista 3D · São Paulo",
     line1: "Mundos que existem",
     line2: "antes de ganhar vida.",
-    text: "Ambientes, level design e cinematics em Unreal Engine e Unity, construídos com intenção, atmosfera e detalhe, do blockout à otimização.",
+    text: "Game design, level design e arte 3D em Unreal Engine e Unity: da ideia e dos puzzles ao ambiente jogável, com intenção, atmosfera e detalhe.",
     explore: "Explorar projetos",
     contact: "Iniciar contato",
     available: "Disponível para projetos",
@@ -33,7 +33,7 @@ const pt = {
     imageAlt: "Ambiente 3D noturno criado por Jonatas Araújo",
     scroll: "Role para explorar",
     scrollLabel: "Ir para os projetos",
-    stats: ["projetos em destaque", "projetos freelance", "de formação em Game Design", "plataformas: Unreal, Unity e Roblox"],
+    stats: ["jogos publicados", "projetos freelance", "de formação em Game Design", "plataformas: Unreal, Unity e Roblox"],
     years: " anos",
   },
   visitors: {
@@ -42,13 +42,28 @@ const pt = {
   },
   work: {
     title: "Trabalhos selecionados",
-    text: "Uma galeria curada entre trabalhos profissionais, ambientes em tempo real, level design e escultura digital. Clique em uma imagem para ampliar.",
-    filterLabel: "Filtrar trabalhos",
-    filters: { all: "Todos", ambientes: "Ambientes", criaturas: "Criaturas", jogos: "Jogos" },
-    shown: (n) => `${n} ${n === 1 ? "trabalho exibido" : "trabalhos exibidos"}`,
+    text: "Jogos que ajudei a criar, ambientes 3D para clientes e criaturas esculpidas. Clique em um projeto para ver imagens, vídeos e o meu papel em cada um.",
+    groupNav: "Ir para um grupo de trabalhos",
+    groups: {
+      games: { title: "Jogos", text: "Game design, level design, puzzles e narrativa em jogos publicados no itch.io e na Google Play." },
+      environments: { title: "Ambientes 3D", text: "Trabalhos freelance de environment art em tempo real: estádio, teatro e resort em realidade virtual." },
+      creatures: { title: "Criaturas e modelagem", text: "Escultura orgânica e estudos de anatomia em ZBrush, apresentados em render e em engine." },
+    },
     open: (title) => `${title}, ampliar imagem na galeria`,
     images: (n) => `${n} imagens`,
+    items: (n) => `${n} itens`,
+    videoBadge: "vídeo",
     cta: "Gostou do trabalho? Vamos conversar",
+  },
+  featured: {
+    eyebrow: "Último lançamento · thatgamejam #02",
+    pitch: "Uma floresta presa num outono eterno. Troque entre as quatro estações, até no ar, para resolver puzzles e trazer a vida de volta. Sem combate, de 10 a 15 minutos.",
+    roleLabel: "Meu papel",
+    role: ["Game design", "Level design", "Puzzles", "História"],
+    team: "Em equipe, pela Wolforge Games",
+    play: "Jogar no itch.io",
+    watch: "Ver o passo a passo",
+    videoLabel: "Trecho de jogo: troca de estações em Autumnbound",
   },
   recent: {
     title: "Novidades no ArtStation",
@@ -67,6 +82,8 @@ const pt = {
     thumb: (i, n) => `Ver imagem ${i} de ${n}`,
     tags: "Ferramentas e disciplinas",
     play: { itch: "Ver o jogo no itch.io", play: "Baixar na Google Play" },
+    role: "Meu papel",
+    video: (i, n) => `Vídeo, item ${i} de ${n}`,
     artstation: "Ver projeto completo no ArtStation",
     notes: "Notas e créditos (ArtStation)",
   },
@@ -75,15 +92,15 @@ const pt = {
     h2a: "Entre a forma e a função,",
     h2b: "eu construo presença.",
     body1:
-      "Sou Jonatas Araújo, artista 3D focado em transformar ideias em espaços, personagens e cenas que convidam o olhar a permanecer. Meu processo une sensibilidade visual e lógica de produção, da primeira massa cinza ao render final.",
+      "Sou Jonatas Araújo, game designer, level designer e artista 3D. Transformo ideias em jogos e em espaços, criaturas e cenas que convidam o olhar a permanecer, unindo sensibilidade visual e lógica de produção, do conceito e do blockout ao asset pronto para o jogo.",
     body2:
-      "Trabalho com environment art, level design e world building em Unity, Unreal Engine 5 e Roblox, com experiência em projetos de realidade virtual e produção freelance, do blockout e da criação de assets até a montagem de cenas e a otimização de performance.",
+      "Concebi puzzles, fases e narrativa em game jams e projetos em equipe (Autumnbound, Block 406, The God of Small Things, A Lenda do Cristal) e trabalho com environment art e world building em Unity, Unreal Engine 5 e Roblox, com experiência em realidade virtual e produção freelance, incluindo otimização de performance.",
     link: "Conheça meu ArtStation",
     disciplines: [
-      ["01", "3D Modeling", "Hard surface, props e escultura orgânica com atenção à silhueta e aos materiais."],
+      ["01", "Game Design", "Conceito, mecânicas, puzzles, progressão e história, do documento ao jogo jogável."],
       ["02", "Level Design", "Espaços que orientam o jogador, do primeiro blocking à composição final."],
-      ["03", "Unreal Engine", "Ambientes em tempo real, iluminação, Blueprints e experiências interativas."],
-      ["04", "Cinematics", "Narrativa visual, câmera, ritmo e sequências criadas dentro da Unreal Engine."],
+      ["03", "3D e Criaturas", "Environment art, hard surface, props e escultura orgânica com atenção à silhueta e aos materiais."],
+      ["04", "Unreal Engine", "Ambientes em tempo real, iluminação, Blueprints e cinematics."],
     ],
     toolkitTitle: "Ferramentas e competências",
     toolkit: [
@@ -192,6 +209,7 @@ const pt = {
     },
     cristal: {
       subtitle: "Jogo mobile · Roguelite · Android",
+      role: "Game design: personagens, fases, chefes e habilidades",
       description:
         "Roguelite de sobrevivência em pixel art, publicado na Google Play: o Cristal se partiu e seus fragmentos despertaram os mortos. Escolha um herói e sobreviva às hordas por 10 minutos, subindo de nível e montando uma build diferente a cada partida com cartas de habilidade. São 8 heróis, 5 regiões com um chefe cada e camadas de desafio cada vez mais difíceis. Desenvolvido em equipe, pela Bighouse. Fui responsável pelo game design: a ideia dos personagens, das fases e dos chefes, e as habilidades dos heróis. Gratuito para jogar, com compras opcionais.",
       tags: ["Game design", "Roguelite", "Pixel art", "Mobile", "Android"],
@@ -205,6 +223,7 @@ const pt = {
     },
     block406: {
       subtitle: "Game jam · Level design · Versão alfa",
+      role: "Game design, level design e environment art",
       description:
         "Protótipo (versão alfa) de terror psicológico em estilo retrô, inspirado em Silent Hill e Resident Evil, criado em equipe para uma game jam: um prédio em quarentena, corredores vazios e o isolamento como atmosfera. Atuei como game designer, level designer e environment artist, trabalhando progressão, fluxo do jogador, objetivos e atmosfera em Unreal Engine. Com Kauê Augusto (arte 3D), Erick Monteiro e Lucas Onishi (programação). As seis primeiras imagens são capturas do jogo; as três últimas mostram o blockout inicial, antes da arte final. Versão para Windows, disponível para baixar no itch.io.",
       tags: ["Unreal Engine", "Level design", "Game design", "Terror", "Game jam"],
@@ -222,6 +241,7 @@ const pt = {
     },
     god: {
       subtitle: "Jogo · Game jam · HTML5",
+      role: "Game design e base da história",
       description:
         "Jogo de estratégia narrativo em 1-bit sobre fé, sacrifício e memória: um deus esquecido desperta para reconstruir uma civilização perdida em sete dias. Reúna recursos, guie seu povo e encare as consequências de cada escolha divina. Tudo tem um preço, e ser lembrado pode custar mais do que você espera. Jogável no navegador, publicado no itch.io. Fui responsável pelo game design e criei a base principal da história. Ficou em 13º lugar entre 78 inscritos na 1-Bit Jam 15 (#12 em Som, #17 em Arte e em Originalidade). A página do jogo declara uso de IA como apoio no código e nos gráficos.",
       tags: ["1-bit", "Pixel art", "Estratégia", "Narrativo", "Game jam", "HTML5"],
@@ -237,11 +257,15 @@ const pt = {
     },
     autumnbound: {
       subtitle: "Jogo · Game jam · Windows",
+      role: "Game design, level design, puzzles e história",
       description:
-        "Plataforma 2D de puzzles, sem combate, feito para a thatgamejam #02, cujo tema era uma faixa de música. A floresta está presa num outono eterno e você, Aster, a última folha da Grande Árvore, troca entre as quatro estações na hora, até no ar: a primavera faz plantas crescerem, o verão acorda mecanismos de sol, o outono traz vento e planeio, o inverno congela a água em caminhos. Três atos, de 10 a 15 minutos, com estilo pintado à mão inspirado em Ori and the Blind Forest. Feito em equipe pela Wolforge Games (Jonatas Araujo, André CasaGrande e Adriano Wolf), na Godot. A página do jogo declara uso de IA como apoio no código e nos gráficos.",
+        "Plataforma 2D de puzzles, sem combate, feito para a thatgamejam #02, cujo tema era uma faixa de música. A floresta está presa num outono eterno e você, Aster, a última folha da Grande Árvore, troca entre as quatro estações na hora, até no ar: a primavera faz plantas crescerem, o verão acorda mecanismos de sol, o outono traz vento e planeio, o inverno congela a água em caminhos. Três atos, de 10 a 15 minutos, com estilo pintado à mão inspirado em Ori and the Blind Forest. Fiz o game design, o level design, os puzzles e a história. Feito em equipe pela Wolforge Games (Jonatas Araujo, André CasaGrande e Adriano Wolf), na Godot. A página do jogo declara uso de IA como apoio no código e nos gráficos.",
       tags: ["Puzzle platformer", "Game jam", "Godot", "2D", "Windows"],
       alts: [
         "Capa de Autumnbound: o logo colorido sobre uma floresta de âmbar e roxo, com a criatura Aster ao lado de uma pedra rúnica brilhante",
+        "Vídeo passo a passo de Autumnbound: explorar Whispering Woods, abrir o mapa, trocar de estação e resolver o puzzle do moinho",
+        "Trecho de jogo em vídeo: Aster troca do outono para a primavera e as plantas crescem",
+        "Trecho de jogo em vídeo: o puzzle do moinho, que acorda ao trocar de estação",
         "Tela de título de Autumnbound: o logo colorido sobre uma floresta de âmbar e roxo, com a criatura Aster ao lado de uma pedra rúnica brilhante",
         "Aster diante de um moinho de pedra com as pás iluminadas, ao lado de uma cesta com uma flor rosa, em uma floresta de outono",
         "Aster à beira de um lago azul-esverdeado, em uma floresta fria e nublada, com cristais de gelo e uma toca cheia de folhas laranja",
@@ -283,8 +307,8 @@ const pt = {
 const en = {
   htmlLang: "en",
   meta: {
-    title: "JAX MADE 3D | Jonatas Araújo, 3D Artist",
-    description: "Portfolio of Jonatas Araújo: 3D artist and level designer. Environments, 3D modeling, level design and cinematics in Unreal Engine and Unity.",
+    title: "JAX MADE 3D | Jonatas Araújo, Game Designer and 3D Artist",
+    description: "Portfolio of Jonatas Araújo: game designer, level designer and 3D artist. Published games, 3D environments and creatures in Unreal Engine and Unity.",
   },
   skip: "Skip to content",
   nav: {
@@ -301,10 +325,10 @@ const en = {
   },
   lang: { label: "Language", pt: "Português", en: "English" },
   hero: {
-    eyebrow: "Jonatas Araújo · 3D Artist · São Paulo",
+    eyebrow: "Jonatas Araújo · Game Designer & 3D Artist · São Paulo",
     line1: "Worlds that exist",
     line2: "before they come to life.",
-    text: "Environments, level design and cinematics in Unreal Engine and Unity, built with intent, atmosphere and detail, from blockout to optimization.",
+    text: "Game design, level design and 3D art in Unreal Engine and Unity: from the idea and the puzzles to a playable environment, with intent, atmosphere and detail.",
     explore: "Explore projects",
     contact: "Get in touch",
     available: "Available for projects",
@@ -312,7 +336,7 @@ const en = {
     imageAlt: "Night-time 3D environment created by Jonatas Araújo",
     scroll: "Scroll to explore",
     scrollLabel: "Go to the projects",
-    stats: ["featured projects", "freelance projects", "of Game Design training", "platforms: Unreal, Unity and Roblox"],
+    stats: ["published games", "freelance projects", "of Game Design training", "platforms: Unreal, Unity and Roblox"],
     years: " years",
   },
   visitors: {
@@ -321,13 +345,28 @@ const en = {
   },
   work: {
     title: "Selected work",
-    text: "A curated gallery of professional work, real-time environments, level design and digital sculpting. Click an image to enlarge.",
-    filterLabel: "Filter work",
-    filters: { all: "All", ambientes: "Environments", criaturas: "Creatures", jogos: "Games" },
-    shown: (n) => `${n} ${n === 1 ? "project shown" : "projects shown"}`,
+    text: "Games I helped create, 3D environments for clients and sculpted creatures. Click a project to see images, videos and my role in each one.",
+    groupNav: "Jump to a group of work",
+    groups: {
+      games: { title: "Games", text: "Game design, level design, puzzles and narrative in games published on itch.io and Google Play." },
+      environments: { title: "3D Environments", text: "Freelance real-time environment art: a stadium, a theater and a virtual-reality resort." },
+      creatures: { title: "Creatures and modeling", text: "Organic sculpting and anatomy studies in ZBrush, shown as renders and in engine." },
+    },
     open: (title) => `${title}, open in the gallery`,
     images: (n) => `${n} images`,
+    items: (n) => `${n} items`,
+    videoBadge: "video",
     cta: "Like what you see? Let's talk",
+  },
+  featured: {
+    eyebrow: "Latest release · thatgamejam #02",
+    pitch: "A forest stuck in an endless autumn. Shift between the four seasons, even in mid-air, to solve puzzles and bring life back. No combat, 10 to 15 minutes.",
+    roleLabel: "My role",
+    role: ["Game design", "Level design", "Puzzles", "Story"],
+    team: "Made by a team, Wolforge Games",
+    play: "Play on itch.io",
+    watch: "Watch the walkthrough",
+    videoLabel: "Gameplay clip: switching seasons in Autumnbound",
   },
   recent: {
     title: "New on ArtStation",
@@ -346,6 +385,8 @@ const en = {
     thumb: (i, n) => `View image ${i} of ${n}`,
     tags: "Tools and disciplines",
     play: { itch: "View the game on itch.io", play: "Get it on Google Play" },
+    role: "My role",
+    video: (i, n) => `Video, item ${i} of ${n}`,
     artstation: "View full project on ArtStation",
     notes: "Notes and credits (ArtStation)",
   },
@@ -354,15 +395,15 @@ const en = {
     h2a: "Between form and function,",
     h2b: "I build presence.",
     body1:
-      "I'm Jonatas Araújo, a 3D artist focused on turning ideas into spaces, characters and scenes that invite the eye to stay. My process blends visual sensitivity with production logic, from the first gray mass to the final render.",
+      "I'm Jonatas Araújo, a game designer, level designer and 3D artist. I turn ideas into games and into spaces, creatures and scenes that invite the eye to stay, blending visual sensitivity with production logic, from concept and blockout to the game-ready asset.",
     body2:
-      "I work on environment art, level design and world building in Unity, Unreal Engine 5 and Roblox, with experience in virtual reality projects and freelance production, from blockout and asset creation to scene assembly and performance optimization.",
+      "I've designed puzzles, levels and narrative in game jams and team projects (Autumnbound, Block 406, The God of Small Things, A Lenda do Cristal) and I work on environment art and world building in Unity, Unreal Engine 5 and Roblox, with experience in virtual reality and freelance production, including performance optimization.",
     link: "See my ArtStation",
     disciplines: [
-      ["01", "3D Modeling", "Hard surface, props and organic sculpting with attention to silhouette and materials."],
+      ["01", "Game Design", "Concept, mechanics, puzzles, progression and story, from document to playable game."],
       ["02", "Level Design", "Spaces that guide the player, from the first blocking to the final composition."],
-      ["03", "Unreal Engine", "Real-time environments, lighting, Blueprints and interactive experiences."],
-      ["04", "Cinematics", "Visual storytelling, camera, pacing and sequences built inside Unreal Engine."],
+      ["03", "3D and Creatures", "Environment art, hard surface, props and organic sculpting with attention to silhouette and materials."],
+      ["04", "Unreal Engine", "Real-time environments, lighting, Blueprints and cinematics."],
     ],
     toolkitTitle: "Tools and skills",
     toolkit: [
@@ -471,6 +512,7 @@ const en = {
     },
     cristal: {
       subtitle: "Mobile game · Roguelite · Android",
+      role: "Game design: characters, levels, bosses and abilities",
       description:
         "A pixel-art survival roguelite published on Google Play: the Crystal shattered and its fragments woke the dead. Pick a hero and survive the hordes for 10 minutes, leveling up and building a different run every match with ability cards. There are 8 heroes, 5 regions with a boss each and ever-harder challenge layers. Developed by a team at Bighouse. I was responsible for the game design: the idea behind the characters, levels and bosses, and the heroes' abilities. Free to play, with optional purchases.",
       tags: ["Game design", "Roguelite", "Pixel art", "Mobile", "Android"],
@@ -484,6 +526,7 @@ const en = {
     },
     block406: {
       subtitle: "Game jam · Level design · Alpha version",
+      role: "Game design, level design and environment art",
       description:
         "Retro-style psychological horror prototype (alpha version) inspired by Silent Hill and Resident Evil, made by a team for a game jam: a building under quarantine, empty hallways and isolation as atmosphere. I worked as game designer, level designer and environment artist, on progression, player flow, objectives and atmosphere in Unreal Engine. With Kauê Augusto (3D art), Erick Monteiro and Lucas Onishi (programming). The first six images are in-game captures; the last three show the initial blockout, before the final art. Windows build, available to download on itch.io.",
       tags: ["Unreal Engine", "Level design", "Game design", "Horror", "Game jam"],
@@ -501,6 +544,7 @@ const en = {
     },
     god: {
       subtitle: "Game · Game jam · HTML5",
+      role: "Game design and the core of the story",
       description:
         "A 1-bit narrative strategy game about faith, sacrifice and remembrance: a forgotten god awakens to rebuild a lost civilization over seven days. Gather resources, guide your people and face the consequences of every divine choice. Everything has a price, and being remembered may cost more than you expect. Playable in the browser, published on itch.io. I was responsible for the game design and created the core of the story. It ranked 13th out of 78 entries in 1-Bit Jam 15 (#12 in Sound, #17 in Art and in Originality). The game page discloses AI assistance with code and graphics.",
       tags: ["1-bit", "Pixel art", "Strategy", "Narrative", "Game jam", "HTML5"],
@@ -516,11 +560,15 @@ const en = {
     },
     autumnbound: {
       subtitle: "Game · Game jam · Windows",
+      role: "Game design, level design, puzzles and story",
       description:
-        "A 2D puzzle platformer with no combat, made for thatgamejam #02, whose theme was a piece of music. The forest is stuck in an endless autumn, and you, Aster, the last leaf of the Great Tree, shift between the four seasons instantly, even in mid-air: spring grows plants, summer wakes sun mechanisms, autumn brings wind and gliding, winter freezes water into paths. Three acts, 10 to 15 minutes, in a hand-painted style inspired by Ori and the Blind Forest. Made by a team, Wolforge Games (Jonatas Araujo, André CasaGrande and Adriano Wolf), in Godot. The game page discloses AI assistance with code and graphics.",
+        "A 2D puzzle platformer with no combat, made for thatgamejam #02, whose theme was a piece of music. The forest is stuck in an endless autumn, and you, Aster, the last leaf of the Great Tree, shift between the four seasons instantly, even in mid-air: spring grows plants, summer wakes sun mechanisms, autumn brings wind and gliding, winter freezes water into paths. Three acts, 10 to 15 minutes, in a hand-painted style inspired by Ori and the Blind Forest. I did the game design, the level design, the puzzles and the story. Made by a team, Wolforge Games (Jonatas Araujo, André CasaGrande and Adriano Wolf), in Godot. The game page discloses AI assistance with code and graphics.",
       tags: ["Puzzle platformer", "Game jam", "Godot", "2D", "Windows"],
       alts: [
         "Autumnbound cover: the colorful logo over an amber and purple forest, with the creature Aster beside a glowing rune stone",
+        "Autumnbound step-by-step video: exploring Whispering Woods, opening the map, shifting seasons and solving the windmill puzzle",
+        "Gameplay clip: Aster shifts from autumn to spring and the plants grow",
+        "Gameplay clip: the windmill puzzle, which wakes up when the season changes",
         "Autumnbound title screen: the colorful logo over an amber and purple forest, with the creature Aster beside a glowing rune stone",
         "Aster in front of a stone windmill with glowing blades, next to a basket with a pink flower, in an autumn forest",
         "Aster at the edge of a teal lake, in a cold misty forest, with ice crystals and a burrow full of orange leaves",

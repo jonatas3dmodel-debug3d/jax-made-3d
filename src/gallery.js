@@ -25,6 +25,12 @@ function localImage(base, alt) {
   };
 }
 
+/** Vídeo hospedado no próprio site (public/work/<chave>.mp4): o poster e a miniatura vêm de uma imagem do manifesto. */
+function localVideo(entry, alt) {
+  const poster = localImage(entry.poster, alt);
+  return { ...poster, video: `/work/${entry.video}.mp4`, poster: poster.src, loop: Boolean(entry.loop) };
+}
+
 const remoteImages = (title, sources, t) =>
   sources.map((src, index) => ({ src, thumb: sizeOf(src, "small"), alt: t.artstation.image(title, index + 1, sources.length) }));
 
@@ -39,16 +45,21 @@ export function buildGallery(lang) {
 
   const curated = projects.map((project) => {
     const text = t.projects[project.key];
-    const images = project.images.map((base, index) => localImage(base, text.alts[index] ?? text.alts[0]));
+    const images = project.images.map((entry, index) => {
+      const alt = text.alts[index] ?? text.alts[0];
+      return typeof entry === "string" ? localImage(entry, alt) : localVideo(entry, alt);
+    });
     const base = {
       key: project.key,
       title: project.title,
+      group: project.group,
       categories: project.categories,
       layout: project.layout,
       externalUrl: project.externalUrl,
       store: project.store,
       subtitle: text.subtitle,
       description: text.description,
+      role: text.role,
       tags: text.tags,
       cover: images[0],
       images,

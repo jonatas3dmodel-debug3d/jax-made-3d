@@ -80,3 +80,8 @@ npm run sync:artstation   # busca o feed e atualiza o arquivo (também roda ante
 4. Clique em **Deploy**.
 
 Após conectar o projeto, cada atualização enviada à branch `main` gera uma nova publicação automaticamente.
+
+### Grupos, vídeos e destaque (2026-11)
+- Cada projeto de `src/data.js` tem `group`: `games`, `environments` ou `creatures` (a seção Trabalhos mostra um bloco por grupo, nessa ordem; a ordem dentro do grupo é a ordem do array).
+- Em `images`, uma entrada pode ser um vídeo: `{ video: "pasta/arquivo", poster: "pasta/imagem-do-manifesto", loop: true }`. O MP4 fica em `public/work/pasta/arquivo.mp4`. `loop: true` = repete mudo e sem controles (clipe curto); sem `loop` = vídeo com controles. Vídeos do site são **sem áudio** de propósito (a música da jam só pode ser usada na entrega dela).
+- `role` (em `copy.js`, por projeto) aparece na galeria como "Meu papel". O bloco "Último lançamento" (`Featured` em `App.jsx`) usa o projeto `autumnbound` e o primeiro vídeo em loop dele.

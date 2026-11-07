@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { profileUrl, syncedAt } from "./artstation.js";
 import { languages } from "./copy.js";
-import { artstation, email, filterKeys, stats, whatsapp } from "./data.js";
+import { artstation, email, groupKeys, stats, whatsapp } from "./data.js";
 import { buildGallery } from "./gallery.js";
 import { CountUp, prefersReducedMotion, usePauseOffscreen, useReveal, useScrollEffects, useScrollSpy } from "./hooks.jsx";
 import { LangProvider, useLang } from "./i18n.jsx";
@@ -204,16 +204,31 @@ function Hero() {
 }
 
 /* -------------------------------------------------------------------------------------------- */
-function LightboxFigure({ project }) {
+function LightboxFigure({ project, start = 0 }) {
   const { t } = useLang();
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(Math.min(start, project.images.length - 1));
   const images = project.images;
   const shown = images[current] ?? images[0];
   const many = images.length > 1;
 
   return (
     <figure className="lightbox__figure">
-      {many ? (
+      {shown.video ? (
+        <div className="lightbox__stage lightbox__stage--video">
+          <video
+            key={shown.video}
+            src={shown.video}
+            poster={shown.poster}
+            aria-label={shown.alt}
+            playsInline
+            preload="metadata"
+            muted={shown.loop}
+            loop={shown.loop}
+            autoPlay={shown.loop && !prefersReducedMotion()}
+            controls={!shown.loop || prefersReducedMotion()}
+          />
+        </div>
+      ) : many ? (
         <button type="button" className="lightbox__stage" onClick={() => setCurrent((value) => (value + 1) % images.length)} aria-label={t.lightbox.stage(current + 1, images.length)}>
           <img src={shown.src} srcSet={shown.srcSet} sizes="(max-width: 1240px) 100vw, 1240px" alt={shown.alt} />
         </button>
@@ -224,7 +239,13 @@ function LightboxFigure({ project }) {
         <ul className="lightbox__thumbs" aria-label={t.lightbox.thumbs}>
           {images.map((image, index) => (
             <li key={image.src}>
-              <button type="button" aria-label={t.lightbox.thumb(index + 1, images.length)} aria-current={index === current ? "true" : undefined} onClick={() => setCurrent(index)}>
+              <button
+                type="button"
+                className={image.video ? "is-video" : undefined}
+                aria-label={image.video ? t.lightbox.video(index + 1, images.length) : t.lightbox.thumb(index + 1, images.length)}
+                aria-current={index === current ? "true" : undefined}
+                onClick={() => setCurrent(index)}
+              >
                 <img src={image.thumb} alt="" loading="lazy" decoding="async" />
               </button>
             </li>
@@ -238,6 +259,11 @@ function LightboxFigure({ project }) {
             {project.title}
           </h2>
           <p>{project.description}</p>
+          {project.role && (
+            <p className="lightbox__role">
+              <span>{t.lightbox.role}</span> {project.role}
+            </p>
+          )}
           {project.tags?.length > 0 && (
             <ul className="chips" aria-label={t.lightbox.tags}>
               {project.tags.map((tag) => (
@@ -267,7 +293,7 @@ function LightboxFigure({ project }) {
   );
 }
 
-function Lightbox({ items, index, onChange, onClose }) {
+function Lightbox({ items, index, start, onChange, onClose }) {
   const { t } = useLang();
   const dialogRef = useRef(null);
   const project = items[index];
@@ -322,7 +348,7 @@ function Lightbox({ items, index, onChange, onClose }) {
       <button className="lightbox__nav lightbox__nav--prev" type="button" onClick={() => onChange(-1)} aria-label={t.lightbox.prev}>
         ←
       </button>
-      <LightboxFigure key={project.key} project={project} />
+      <LightboxFigure key={project.key} project={project} start={start} />
       <span className="lightbox__counter" aria-live="polite">
         {String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
       </span>
@@ -333,8 +359,64 @@ function Lightbox({ items, index, onChange, onClose }) {
   );
 }
 
+/** Destaque do último lançamento: vídeo curto em loop, o meu papel e os botões para jogar e para ver o passo a passo. */
+function Featured({ project, onWatch }) {
+  const { t } = useLang();
+  const f = t.featured;
+  const videoRef = useRef(null);
+  const loop = project.images.find((image) => image.video && image.loop);
+  const reduced = prefersReducedMotion();
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reduced || !("IntersectionObserver" in window)) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [reduced]);
+
+  if (!loop) return null;
+  return (
+    <section className="featured" aria-labelledby="featured-title">
+      <div className="featured__media reveal">
+        <video ref={videoRef} src={loop.video} poster={loop.poster} aria-label={f.videoLabel} muted loop playsInline preload="none" controls={reduced} />
+        <span className="featured__tag">{f.eyebrow}</span>
+      </div>
+      <div className="featured__copy reveal" style={{ "--reveal-delay": "120ms" }}>
+        <h2 id="featured-title" translate="no">
+          {project.title}
+        </h2>
+        <p>{f.pitch}</p>
+        <div className="featured__role">
+          <span>{f.roleLabel}</span>
+          <ul className="chips">
+            {f.role.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <p className="featured__team">{f.team}</p>
+        <div className="featured__actions">
+          <a className="button button--primary" href={project.externalUrl} target="_blank" rel="noreferrer">
+            {f.play} <Arrow />
+          </a>
+          <button type="button" className="button button--outline" onClick={onWatch}>
+            {f.watch} <span aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* -------------------------------------------------------------------------------------------- */
-function Work({ filter, setFilter, curated, items, recent, onOpen }) {
+function Work({ curated, recent, onOpen }) {
   const { t } = useLang();
 
   const tilt = (event) => {
@@ -366,57 +448,60 @@ function Work({ filter, setFilter, curated, items, recent, onOpen }) {
         <p>{t.work.text}</p>
       </div>
 
-      <div className="filters reveal" role="group" aria-label={t.work.filterLabel}>
-        {filterKeys.map((key) => {
-          const count = key === "all" ? curated.length : curated.filter((p) => p.categories.includes(key)).length;
-          return (
-            <button key={key} type="button" aria-pressed={filter === key} onClick={() => setFilter(key)}>
-              {t.work.filters[key]} <small>{String(count).padStart(2, "0")}</small>
-            </button>
-          );
-        })}
-      </div>
+      <nav className="filters reveal" aria-label={t.work.groupNav}>
+        {groupKeys.map((key) => (
+          <a key={key} href={`#grupo-${key}`}>
+            {t.work.groups[key].title} <small>{String(curated.filter((p) => p.group === key).length).padStart(2, "0")}</small>
+          </a>
+        ))}
+      </nav>
 
-      <p className="sr-only" role="status">
-        {t.work.shown(items.length)}
-      </p>
-      <div className={`project-grid ${filter === "all" ? "is-editorial" : "is-uniform"}`} onPointerMove={tilt} onPointerOut={untilt}>
-        {items.map((project, index) => {
-          const wide = filter === "all" && project.layout === "wide";
-          return (
-            <button
-              type="button"
-              className={`project reveal${wide ? " project--wide" : ""}`}
-              key={`${filter}-${project.key}`}
-              onClick={() => onOpen("work", index)}
-              aria-label={t.work.open(project.title)}
-              style={{ "--reveal-delay": `${(index % 2) * 110}ms` }}
-            >
-              <img
-                src={project.cover.src}
-                srcSet={project.cover.srcSet}
-                sizes={wide ? "(max-width: 1280px) 100vw, 1230px" : "(max-width: 900px) 100vw, 615px"}
-                width={project.cover.width}
-                height={project.cover.height}
-                alt={project.cover.alt}
-                loading="lazy"
-                decoding="async"
-              />
-              <span className="project__shade" />
-              <span className="project__shine" aria-hidden="true" />
-              <span className="project__number">{String(curated.indexOf(project) + 1).padStart(2, "0")}</span>
-              {project.images.length > 1 && <span className="project__count">{t.work.images(project.images.length)}</span>}
-              <span className="project__copy">
-                <small>{project.subtitle}</small>
-                <strong translate="no">{project.title}</strong>
-              </span>
-              <span className="project__open" aria-hidden="true">
-                ＋
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {groupKeys.map((key) => {
+        const list = curated.filter((p) => p.group === key);
+        return (
+          <div className="work-group" id={`grupo-${key}`} key={key} role="group" aria-labelledby={`grupo-${key}-title`}>
+            <header className="work-group__head reveal">
+              <h3 id={`grupo-${key}-title`}>{t.work.groups[key].title}</h3>
+              <p>{t.work.groups[key].text}</p>
+            </header>
+            <div className="project-grid is-uniform" onPointerMove={tilt} onPointerOut={untilt}>
+              {list.map((project, index) => (
+                <button
+                  type="button"
+                  className="project reveal"
+                  key={project.key}
+                  onClick={() => onOpen("work", curated.indexOf(project))}
+                  aria-label={t.work.open(project.title)}
+                  style={{ "--reveal-delay": `${(index % 2) * 110}ms` }}
+                >
+                  <img
+                    src={project.cover.src}
+                    srcSet={project.cover.srcSet}
+                    sizes="(max-width: 900px) 100vw, 615px"
+                    width={project.cover.width}
+                    height={project.cover.height}
+                    alt={project.cover.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span className="project__shade" />
+                  <span className="project__shine" aria-hidden="true" />
+                  <span className="project__number">{String(curated.indexOf(project) + 1).padStart(2, "0")}</span>
+                  {project.images.some((image) => image.video) && <span className="project__badge">▶ {t.work.videoBadge}</span>}
+                  {project.images.length > 1 && <span className="project__count">{t.work.items(project.images.length)}</span>}
+                  <span className="project__copy">
+                    <small>{project.subtitle}</small>
+                    <strong translate="no">{project.title}</strong>
+                  </span>
+                  <span className="project__open" aria-hidden="true">
+                    ＋
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
 
       <Recent items={recent} onOpen={(index) => onOpen("recent", index)} />
 
@@ -705,27 +790,24 @@ function Footer() {
 function Home() {
   const { lang, t } = useLang();
   const rootRef = useRef(null);
-  const [filter, setFilter] = useState("all");
-  const [box, setBox] = useState(null); // { list: "work" | "recent", index }
+  const [box, setBox] = useState(null); // { list: "work" | "recent", index, start }
   const active = useScrollSpy(sectionIds, lang);
 
   const gallery = useMemo(() => buildGallery(lang), [lang]);
-  const items = useMemo(
-    () => (filter === "all" ? gallery.curated : gallery.curated.filter((project) => project.categories.includes(filter))),
-    [gallery, filter],
-  );
+  const items = gallery.curated;
+  const featuredProject = items.find((project) => project.key === "autumnbound");
   const boxItems = box?.list === "recent" ? gallery.recent : items;
 
   useScrollEffects(rootRef, lang);
   usePauseOffscreen(rootRef, ".hero, .statement, .contact", lang);
-  useReveal(rootRef, [filter, lang]);
+  useReveal(rootRef, [lang]);
 
-  const openBox = useCallback((list, index) => setBox({ list, index }), []);
+  const openBox = useCallback((list, index, start = 0) => setBox({ list, index, start }), []);
   const changeProject = useCallback(
     (direction) =>
       setBox((current) => {
         const length = (current.list === "recent" ? gallery.recent : items).length;
-        return { ...current, index: (current.index + direction + length) % length };
+        return { ...current, start: 0, index: (current.index + direction + length) % length };
       }),
     [gallery, items],
   );
@@ -744,7 +826,16 @@ function Home() {
 
         <main id="conteudo" tabIndex="-1">
           <Hero />
-          <Work filter={filter} setFilter={setFilter} curated={gallery.curated} items={items} recent={gallery.recent} onOpen={openBox} />
+          {featuredProject && (
+            <Featured
+              project={featuredProject}
+              onWatch={() => {
+                const at = featuredProject.images.findIndex((image) => image.video && !image.loop);
+                openBox("work", items.indexOf(featuredProject), Math.max(at, 0));
+              }}
+            />
+          )}
+          <Work curated={gallery.curated} recent={gallery.recent} onOpen={openBox} />
           <About />
           <Experience />
 
@@ -760,7 +851,7 @@ function Home() {
         <Footer />
       </div>
 
-      {box && boxItems[box.index] && <Lightbox items={boxItems} index={box.index} onChange={changeProject} onClose={closeLightbox} />}
+      {box && boxItems[box.index] && <Lightbox items={boxItems} index={box.index} start={box.start ?? 0} onChange={changeProject} onClose={closeLightbox} />}
     </div>
   );
 }

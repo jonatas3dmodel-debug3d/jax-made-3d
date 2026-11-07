@@ -382,9 +382,37 @@
   "autumnbound/00-cover": {
     "widths": [
       640,
-      1240
+      1280,
+      1400
     ],
-    "w": 1240,
-    "h": 830
+    "w": 1400,
+    "h": 1200
+  },
+  "autumnbound/poster-walkthrough": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
+  },
+  "autumnbound/poster-season-shift": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
+  },
+  "autumnbound/poster-windmill": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
   }
 }
