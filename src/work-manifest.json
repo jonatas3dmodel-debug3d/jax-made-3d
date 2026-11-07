@@ -342,5 +342,49 @@
     ],
     "w": 1920,
     "h": 1081
+  },
+  "autumnbound/01-title": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
+  },
+  "autumnbound/02-windmill-autumn": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
+  },
+  "autumnbound/03-forgotten-lake": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
+  },
+  "autumnbound/04-winter-waterfall": {
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "w": 1920,
+    "h": 1080
+  },
+  "autumnbound/00-cover": {
+    "widths": [
+      640,
+      1240
+    ],
+    "w": 1240,
+    "h": 830
   }
 }

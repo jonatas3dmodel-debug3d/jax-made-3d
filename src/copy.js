@@ -235,6 +235,19 @@ const pt = {
         "A mesma vila à noite, com a lua no painel de tempo e os habitantes em silhueta",
       ],
     },
+    autumnbound: {
+      subtitle: "Jogo · Game jam · Windows",
+      description:
+        "Plataforma 2D de puzzles, sem combate, feito para a thatgamejam #02, cujo tema era uma faixa de música. A floresta está presa num outono eterno e você, Aster, a última folha da Grande Árvore, troca entre as quatro estações na hora, até no ar: a primavera faz plantas crescerem, o verão acorda mecanismos de sol, o outono traz vento e planeio, o inverno congela a água em caminhos. Três atos, de 10 a 15 minutos, com estilo pintado à mão inspirado em Ori and the Blind Forest. Feito em equipe pela Wolforge Games (Jonatas Araujo, André CasaGrande e Adriano Wolf), na Godot. A página do jogo declara uso de IA como apoio no código e nos gráficos.",
+      tags: ["Puzzle platformer", "Game jam", "Godot", "2D", "Windows"],
+      alts: [
+        "Capa de Autumnbound: o logo colorido sobre uma floresta de âmbar e roxo, com a criatura Aster ao lado de uma pedra rúnica brilhante",
+        "Tela de título de Autumnbound: o logo colorido sobre uma floresta de âmbar e roxo, com a criatura Aster ao lado de uma pedra rúnica brilhante",
+        "Aster diante de um moinho de pedra com as pás iluminadas, ao lado de uma cesta com uma flor rosa, em uma floresta de outono",
+        "Aster à beira de um lago azul-esverdeado, em uma floresta fria e nublada, com cristais de gelo e uma toca cheia de folhas laranja",
+        "Aster em plataformas de gelo diante de uma grande cachoeira congelada, em uma floresta azul de inverno",
+      ],
+    },
     varkos: {
       subtitle: "ZBrush · Modelagem de criatura",
       description: "Estudo realista de um T. rex com foco em anatomia, detalhes de pele, texturização e apresentação final.",
@@ -499,6 +512,19 @@ const en = {
         "The Pact screen, listing the rules: your people keep you alive, every request has a price, your power is your presence, survive seven nights",
         "Choosing a request at the altar: erase Kaan's memory, invent an enemy, or give the people's pain to Kaan, each option with its cost",
         "The same village at night, with the moon on the time bar and the villagers in silhouette",
+      ],
+    },
+    autumnbound: {
+      subtitle: "Game · Game jam · Windows",
+      description:
+        "A 2D puzzle platformer with no combat, made for thatgamejam #02, whose theme was a piece of music. The forest is stuck in an endless autumn, and you, Aster, the last leaf of the Great Tree, shift between the four seasons instantly, even in mid-air: spring grows plants, summer wakes sun mechanisms, autumn brings wind and gliding, winter freezes water into paths. Three acts, 10 to 15 minutes, in a hand-painted style inspired by Ori and the Blind Forest. Made by a team, Wolforge Games (Jonatas Araujo, André CasaGrande and Adriano Wolf), in Godot. The game page discloses AI assistance with code and graphics.",
+      tags: ["Puzzle platformer", "Game jam", "Godot", "2D", "Windows"],
+      alts: [
+        "Autumnbound cover: the colorful logo over an amber and purple forest, with the creature Aster beside a glowing rune stone",
+        "Autumnbound title screen: the colorful logo over an amber and purple forest, with the creature Aster beside a glowing rune stone",
+        "Aster in front of a stone windmill with glowing blades, next to a basket with a pink flower, in an autumn forest",
+        "Aster at the edge of a teal lake, in a cold misty forest, with ice crystals and a burrow full of orange leaves",
+        "Aster on ice platforms in front of a large frozen waterfall, in a blue winter forest",
       ],
     },
     varkos: {

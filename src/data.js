@@ -76,6 +76,14 @@ export const projects = [
       "god/07-settlement-night",
     ],
   },
+  {
+    key: "autumnbound",
+    title: "Autumnbound",
+    categories: ["jogos"],
+    externalUrl: "https://hunterzinho.itch.io/autumnbound", // página do jogo no itch.io (thatgamejam #02)
+    store: "itch",
+    images: ["autumnbound/00-cover", "autumnbound/01-title", "autumnbound/02-windmill-autumn", "autumnbound/03-forgotten-lake", "autumnbound/04-winter-waterfall"],
+  },
   { key: "varkos", title: "Varkos — Tyrannosaurus Rex", artstationId: "P4el1L", categories: ["criaturas"], images: ["covers/varkos-trex"] },
   { key: "virex", title: "Virex, the Hollow Seer", artstationId: "qJx8bz", categories: ["criaturas"], images: ["covers/virex"] },
   { key: "wolf", title: "Wolf Skull: Desert Relic", artstationId: "qJGWBL", categories: ["criaturas", "ambientes"], images: ["covers/wolf-skull"] },
